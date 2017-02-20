@@ -3,13 +3,15 @@ $(document).ready(function() {
     var winH = $(this).offsetHeight;
     var game = new Phaser.Game(winW, winH, Phaser.AUTO, '', { preload: preload, create: create, update: update });
     var platform;
+    var Trump;
+    var cursors;
 
 
 
     function preload() {
         game.load.image('background', '../images/scene.jpg');
         game.load.image('platform', '../images/platform.png');
-        game.load.spritesheet('dude', '../images/Trump.png', 32, 48);
+        game.load.spritesheet('Trump', '../images/SpriteTrump.png', 124, 130, 9);
 
     }
 
@@ -65,12 +67,27 @@ $(document).ready(function() {
         Trump.body.collideWorldBounds = true;
         Trump.animations.add('left', [0, 1, 2, 3], 10, true);
         Trump.animations.add('right', [5, 6, 7, 8], 10, true);
-
+        cursors = game.input.keyboard.createCursorKeys();
 
 
     }
 
     function update() {
+        // Trump.animations.play("left");
+        // Trump.animations.play("right");
+
+        Trump.body.velocity.x = 0;
+        Trump.body.velocity.y = 0;
+
+        if (cursors.left.isDown) {
+            Trump.body.velocity.x = -100;
+            Trump.animations.play("left");
+        } else if (cursors.right.isDown) {
+            Trump.body.velocity.x = 100;
+            Trump.animations.play("right");
+        } else {
+            Trump.animations.stop();
+        }
 
 
     }
