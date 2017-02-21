@@ -3,7 +3,7 @@ $(document).ready(function() {
     var winH = $(this).offsetHeight;
     var game = new Phaser.Game(winW, winH, Phaser.AUTO, '', { preload: preload, create: create, update: update });
     var platform;
-    var Trump;
+    var Trump, Kim, Pou;
     var cursors;
     var bot;
 
@@ -13,7 +13,8 @@ $(document).ready(function() {
         game.load.image('background', '../images/scene.jpg');
         game.load.image('platform', '../images/platform.png');
         game.load.spritesheet('Trump', '../images/SpriteTrump.png', 124, 140, 8);
-
+        game.load.spritesheet('Kim', '../images/SpriteKim.png', 124, 140, 8);
+        game.load.spritesheet('Pou', '../images/SpritePoutine.png', 124, 140, 8);
 
     }
 
@@ -85,7 +86,11 @@ $(document).ready(function() {
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
         Trump = game.add.sprite(32, game.world.height - 180, 'Trump');
+        Kim = game.add.sprite(40, game.world.height - 180, 'Kim');
+        Pou = game.add.sprite(50, game.world.height - 180, 'Pou');
         game.physics.arcade.enable(Trump);
+        game.physics.arcade.enable(Kim);
+        game.physics.arcade.enable(Pou);
 
         Trump.animations.add('left', [0, 1, 2, 3], 10, true);
         Trump.animations.add('right', [4, 5, 6, 7], 10, true);
@@ -95,45 +100,72 @@ $(document).ready(function() {
         Trump.body.bounce.y = 0;
         Trump.body.gravity.y = 600;
 
+        Kim.animations.add('left', [0, 1, 2, 3], 10, true);
+        Kim.animations.add('right', [4, 5, 6, 7], 10, true);
+        Kim.scale.setTo(0.8, 0.8);
 
+        Kim.body.collideWorldBounds = true;
+        Kim.body.bounce.y = 0;
+        Kim.body.gravity.y = 600;
 
+        Pou.animations.add('left', [0, 1, 2, 3], 10, true);
+        Pou.animations.add('right', [4, 5, 6, 7], 10, true);
+        Pou.scale.setTo(0.8, 0.8);
 
-        bot = game.add.sprite(32, game.world.height - 180, 'bot');
-        game.physics.arcade.enable(bot);
-        bot.animations.add('left', [0, 1, 2], 5, true);
-        bot.animations.add('right', [4, 5, 6], 5, true);
-        bot.body.collideWorldBounds = true;
-        bot.body.bounce.y = 0;
-        bot.body.gravity.y = 600;
+        Pou.body.collideWorldBounds = true;
+        Pou.body.bounce.y = 0;
+        Pou.body.gravity.y = 600;
 
-        game.time.events.repeat(Phaser.Timer.SECOND, 420, start);
+        game.time.events.repeat(Phaser.Timer.SECOND, 420, startKim);
+        game.time.events.repeat(Phaser.Timer.SECOND, 420, startPou);
 
     }
 
-    function start() {
-        var botMover = game.rnd.integerInRange(1, 4);
-        if (botMover == 1) {
-            bot.body.velocity.x = 100;
-            bot.animations.play('right', 10, true);
-        } else if (botMover == 2) {
-            bot.body.velocity.x = -100;
-            bot.animations.play('left', 10, true);
-        } else if (botMover == 3) {
-            bot.body.velocity.y = -800;
-            bot.animations.stop();
-        } else if (botMover == 4) {
+    function startKim() {
+        var botKim = game.rnd.integerInRange(1, 4);
+        if (botKim == 1) {
+            Kim.body.velocity.x = 100;
+            Kim.animations.play('right', 10, true);
+        } else if (botKim == 2) {
+            Kim.body.velocity.x = -100;
+            Kim.animations.play('left', 10, true);
+        } else if (botKim == 3) {
+            Kim.body.velocity.y = -800;
+            Kim.animations.stop();
+        } else if (botKim == 4) {
             console.log("fire");
-            // bot.fire;
-            // bot.animations.stop();
+            // Kim.fire;
         } else {
-            bot.body.velocity.x = 0;
-            bot.animations.stop();
+            Kim.body.velocity.x = 0;
+            Kim.animations.stop();
+        }
+
+    }
+
+    function startPou() {
+        var botPou = game.rnd.integerInRange(1, 4);
+        if (botPou == 1) {
+            Pou.body.velocity.x = 100;
+            Pou.animations.play('right', 10, true);
+        } else if (botPou == 2) {
+            Pou.body.velocity.x = -100;
+            Pou.animations.play('left', 10, true);
+        } else if (botPou == 3) {
+            Pou.body.velocity.y = -800;
+            Pou.animations.stop();
+        } else if (botPou == 4) {
+            console.log("fire");
+            // Pou.fire;
+        } else {
+            Pou.body.velocity.x = 0;
+            Pou.animations.stop();
         }
 
     }
 
     function update() {
-        game.physics.arcade.collide(bot, platform);
+        game.physics.arcade.collide(Kim, platform);
+        game.physics.arcade.collide(Pou, platform);
         cursors = game.input.keyboard.createCursorKeys();
         Trump.body.velocity.x = 0;
         game.physics.arcade.collide(Trump, platform);
