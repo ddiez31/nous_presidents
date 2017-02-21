@@ -124,10 +124,10 @@ $(document).ready(function() {
     function startKim() {
         var botKim = game.rnd.integerInRange(1, 4);
         if (botKim == 1) {
-            Kim.body.velocity.x = 100;
+            Kim.body.velocity.x = 300;
             Kim.animations.play('right', 10, true);
         } else if (botKim == 2) {
-            Kim.body.velocity.x = -100;
+            Kim.body.velocity.x = -300;
             Kim.animations.play('left', 10, true);
         } else if (botKim == 3) {
             Kim.body.velocity.y = -800;
@@ -145,10 +145,10 @@ $(document).ready(function() {
     function startPou() {
         var botPou = game.rnd.integerInRange(1, 4);
         if (botPou == 1) {
-            Pou.body.velocity.x = 100;
+            Pou.body.velocity.x = 300;
             Pou.animations.play('right', 10, true);
         } else if (botPou == 2) {
-            Pou.body.velocity.x = -100;
+            Pou.body.velocity.x = -300;
             Pou.animations.play('left', 10, true);
         } else if (botPou == 3) {
             Pou.body.velocity.y = -800;
