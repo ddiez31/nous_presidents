@@ -13,7 +13,7 @@ $(document).ready(function() {
         game.load.image('background', '../images/scene.jpg');
         game.load.image('platform', '../images/platform.png');
         game.load.spritesheet('Trump', '../images/SpriteTrump.png', 124, 140, 8);
-        game.load.spritesheet('bot', '../images/Mega Man.png', 65, 65);
+
 
     }
 
