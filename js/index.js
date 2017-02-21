@@ -5,13 +5,14 @@ $(document).ready(function() {
     var platform;
     var Trump;
     var cursors;
-
+    var text1;
 
 
     function preload() {
         game.load.image('background', '../images/scene.jpg');
         game.load.image('platform', '../images/platform.png');
         game.load.spritesheet('Trump', '../images/SpriteTrump.png', 124, 130, 9);
+
 
     }
 
@@ -70,9 +71,22 @@ $(document).ready(function() {
         cursors = game.input.keyboard.createCursorKeys();
 
 
+        // thibault :
+        text1 = game.add.text(200, 50, "ECONOMIE", {font: "30px Arial Black", fill: "#1E62C9"});
+        text1.stroke = "#060753";
+        text1.strokeThickness = 16;
+        text1.setShadow(2, 2, "#333333", 2, true, false);
+         game.physics.arcade.enable([text1]);
+
+        text1.body.velocity.setTo(250, 250);
+        text1.body.collideWorldBounds = true;
+        text1.body.bounce.set(1);
+
+
     }
 
     function update() {
+        game.physics.arcade.collide(text1);
         // Trump.animations.play("left");
         // Trump.animations.play("right");
 
@@ -88,7 +102,6 @@ $(document).ready(function() {
         } else {
             Trump.animations.stop();
         }
-
 
     }
 
