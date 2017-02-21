@@ -129,7 +129,7 @@ $(document).ready(function() {
 
         // thibault :
 
-        weapon = game.add.weapon(1, 'bullet');
+        weapon = game.add.weapon(60 , 'bullet');
 
         weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
 
