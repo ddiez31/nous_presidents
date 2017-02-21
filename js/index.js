@@ -2,11 +2,13 @@ $(document).ready(function() {
     var winW = $(this).offsetWidth;
     var winH = $(this).offsetHeight;
     var game = new Phaser.Game(winW, winH, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-    var platform;
+    var platform, word;
     var Trump, Kim, Pou;
     var cursors;
-    var bot;
-
+    var scoreTrump = 0;
+    var scoreKim = 0;
+    var scorePou = 0;
+    var scoreTextTrump, scoreTextKim, scoreTextPou;
 
 
     function preload() {
@@ -15,7 +17,6 @@ $(document).ready(function() {
         game.load.spritesheet('Trump', '../images/SpriteTrump.png', 124, 140, 8);
         game.load.spritesheet('Kim', '../images/SpriteKim.png', 124, 140, 8);
         game.load.spritesheet('Pou', '../images/SpritePoutine.png', 124, 140, 8);
-
     }
 
     function create() {
@@ -85,9 +86,9 @@ $(document).ready(function() {
         ledge = platform.create(300, 150, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        Trump = game.add.sprite(32, game.world.height - 180, 'Trump');
-        Kim = game.add.sprite(40, game.world.height - 180, 'Kim');
-        Pou = game.add.sprite(50, game.world.height - 180, 'Pou');
+        Trump = game.add.sprite(350, game.world.height - 180, 'Trump');
+        Kim = game.add.sprite(20, game.world.height - 180, 'Kim');
+        Pou = game.add.sprite(660, game.world.height - 180, 'Pou');
         game.physics.arcade.enable(Trump);
         game.physics.arcade.enable(Kim);
         game.physics.arcade.enable(Pou);
@@ -119,15 +120,18 @@ $(document).ready(function() {
         game.time.events.repeat(Phaser.Timer.SECOND, 420, startKim);
         game.time.events.repeat(Phaser.Timer.SECOND, 420, startPou);
 
+        scoreTextTrump = game.add.text(350, 16, 'Trump: 0', { fontSize: '18px', fill: '#fff' });
+        scoreTextKim = game.add.text(20, 16, 'Kim Jong-un: 0', { fontSize: '18px', fill: '#fff' });
+        scoreTextPou = game.add.text(660, 16, 'Poutine: 0', { fontSize: '18px', fill: '#fff' });
     }
 
     function startKim() {
         var botKim = game.rnd.integerInRange(1, 4);
         if (botKim == 1) {
-            Kim.body.velocity.x = 100;
+            Kim.body.velocity.x = 300;
             Kim.animations.play('right', 10, true);
         } else if (botKim == 2) {
-            Kim.body.velocity.x = -100;
+            Kim.body.velocity.x = -300;
             Kim.animations.play('left', 10, true);
         } else if (botKim == 3) {
             Kim.body.velocity.y = -800;
@@ -145,10 +149,10 @@ $(document).ready(function() {
     function startPou() {
         var botPou = game.rnd.integerInRange(1, 4);
         if (botPou == 1) {
-            Pou.body.velocity.x = 100;
+            Pou.body.velocity.x = 300;
             Pou.animations.play('right', 10, true);
         } else if (botPou == 2) {
-            Pou.body.velocity.x = -100;
+            Pou.body.velocity.x = -300;
             Pou.animations.play('left', 10, true);
         } else if (botPou == 3) {
             Pou.body.velocity.y = -800;
@@ -160,10 +164,30 @@ $(document).ready(function() {
             Pou.body.velocity.x = 0;
             Pou.animations.stop();
         }
+    }
 
+    function collectWord(Trump, word) {
+        word.kill();
+        scoreTrump += 10;
+        scoreTextTrump.text = 'Trump: ' + scoreTrump;
+    }
+
+    function collectWord(Kim, word) {
+        word.kill();
+        scoreKim += 10;
+        scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
+    }
+
+    function collectWord(Pou, word) {
+        word.kill();
+        scorePou += 10;
+        scoreTextPou.text = 'Poutine: ' + scorePou;
     }
 
     function update() {
+        // game.physics.arcade.collide(Kim, Pou);
+        // game.physics.arcade.collide(Kim, Trump);
+        // game.physics.arcade.collide(Pou, Trump);
         game.physics.arcade.collide(Kim, platform);
         game.physics.arcade.collide(Pou, platform);
         cursors = game.input.keyboard.createCursorKeys();
