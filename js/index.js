@@ -2,11 +2,15 @@ $(document).ready(function() {
     var winW = $(this).offsetWidth;
     var winH = $(this).offsetHeight;
     var game = new Phaser.Game(winW, winH, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-    var platform;
+    var platform, word;
     var Trump, Kim, Pou;
     var cursors;
-    var bot;
-
+    var weapon;
+    var bulletPool;
+    var scoreTrump = 0;
+    var scoreKim = 0;
+    var scorePou = 0;
+    var scoreTextTrump, scoreTextKim, scoreTextPou;
 
 
     function preload() {
@@ -15,7 +19,7 @@ $(document).ready(function() {
         game.load.spritesheet('Trump', '../images/SpriteTrump.png', 124, 140, 8);
         game.load.spritesheet('Kim', '../images/SpriteKim.png', 124, 140, 8);
         game.load.spritesheet('Pou', '../images/SpritePoutine.png', 124, 140, 8);
-
+        game.load.image('bullet', '../images/persoKim.png');
     }
 
     function create() {
@@ -85,9 +89,9 @@ $(document).ready(function() {
         ledge = platform.create(300, 150, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        Trump = game.add.sprite(32, game.world.height - 180, 'Trump');
-        Kim = game.add.sprite(40, game.world.height - 180, 'Kim');
-        Pou = game.add.sprite(50, game.world.height - 180, 'Pou');
+        Trump = game.add.sprite(350, game.world.height - 180, 'Trump');
+        Kim = game.add.sprite(20, game.world.height - 180, 'Kim');
+        Pou = game.add.sprite(660, game.world.height - 180, 'Pou');
         game.physics.arcade.enable(Trump);
         game.physics.arcade.enable(Kim);
         game.physics.arcade.enable(Pou);
@@ -119,6 +123,34 @@ $(document).ready(function() {
         game.time.events.repeat(Phaser.Timer.SECOND, 420, startKim);
         game.time.events.repeat(Phaser.Timer.SECOND, 420, startPou);
 
+        scoreTextTrump = game.add.text(350, 16, 'Trump: 0', { fontSize: '18px', fill: '#fff' });
+        scoreTextKim = game.add.text(20, 16, 'Kim Jong-un: 0', { fontSize: '18px', fill: '#fff' });
+        scoreTextPou = game.add.text(660, 16, 'Poutine: 0', { fontSize: '18px', fill: '#fff' });
+
+        // thibault :
+
+        weapon = game.add.weapon(1, 'bullet');
+
+        weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+
+        weapon.bulletSpeed = 400;
+
+        // Create an object pool of bullets
+        bulletPool = this.game.add.group();
+        for(var i = 0; i < 20; i++) {
+            // Create each bullet and add it to the group.
+            var bullet = this.game.add.sprite(0, 0, 'bullet');
+            bulletPool.add(bullet);
+
+            // Set its pivot point to the center of the bullet
+            bullet.anchor.setTo(0.5, 0.5);
+
+            // Enable physics on the bullet
+            this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
+
+            // Set its initial state to "dead".
+            bullet.kill();
+        }
     }
 
     function startKim() {
@@ -160,10 +192,30 @@ $(document).ready(function() {
             Pou.body.velocity.x = 0;
             Pou.animations.stop();
         }
+    }
 
+    function collectWord(Trump, word) {
+        word.kill();
+        scoreTrump += 10;
+        scoreTextTrump.text = 'Trump: ' + scoreTrump;
+    }
+
+    function collectWord(Kim, word) {
+        word.kill();
+        scoreKim += 10;
+        scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
+    }
+
+    function collectWord(Pou, word) {
+        word.kill();
+        scorePou += 10;
+        scoreTextPou.text = 'Poutine: ' + scorePou;
     }
 
     function update() {
+        // game.physics.arcade.collide(Kim, Pou);
+        // game.physics.arcade.collide(Kim, Trump);
+        // game.physics.arcade.collide(Pou, Trump);
         game.physics.arcade.collide(Kim, platform);
         game.physics.arcade.collide(Pou, platform);
         cursors = game.input.keyboard.createCursorKeys();
@@ -183,9 +235,32 @@ $(document).ready(function() {
             Trump.body.velocity.y = -800;
         }
 
-    }
+        $(window).keypress(function (e) {
+                if (e.keyCode === 32) {
+                    // Get a dead bullet from the pool
+                    var bullet = bulletPool.getFirstDead();
 
+                    // If there aren't any bullets available then don't shoot
+                    if (bullet === null || bullet === undefined) return;
 
+                    // Revive the bullet
+                    // This makes the bullet "alive"
+                    bullet.revive();
 
+                    // Bullets should kill themselves when they leave the world.
+                    // Phaser takes care of this for me by setting this flag
+                    // but you can do it yourself by killing the bullet if
+                    // its x,y coordinates are outside of the world.
+                    bullet.checkWorldBounds = true;
+                    bullet.outOfBoundsKill = true;
 
+                    // Set the bullet position to the gun position.
+                    bullet.reset(Trump.body.x, Trump.body.y);
+
+                    // Shoot it
+                    bullet.body.velocity.x = 200;
+                    bullet.body.velocity.y = 0;
+                }
+            });
+}
 });
