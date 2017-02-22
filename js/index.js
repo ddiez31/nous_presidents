@@ -212,10 +212,20 @@ $(document).ready(function() {
             Kim.animations.stop();
         } else if (botKim == 4 || botKim == 5) {
             if (dirKim == 1) {
+                bullet = bulletPool.getFirstDead();
+                if (bullet === null || bullet === undefined) return;
+                bullet.revive();
+                bullet.checkWorldBounds = true;
+                bullet.outOfBoundsKill = true;
                 bullet.reset(Kim.body.x + 90, Kim.body.y + 20);
                 bullet.body.velocity.x = 300;
                 bullet.body.velocity.y = 0;
             } else if (dirKim == 2) {
+                bullet = bulletPool.getFirstDead();
+                if (bullet === null || bullet === undefined) return;
+                bullet.revive();
+                bullet.checkWorldBounds = true;
+                bullet.outOfBoundsKill = true;
                 bullet.reset(Kim.body.x, Kim.body.y + 20);
                 bullet.body.velocity.x = -300;
                 bullet.body.velocity.y = 0;
@@ -241,10 +251,20 @@ $(document).ready(function() {
             Pou.animations.stop();
         } else if (botPou == 4 || botPou == 5) {
             if (dirPou == 1) {
+                bullet = bulletPool.getFirstDead();
+                if (bullet === null || bullet === undefined) return;
+                bullet.revive();
+                bullet.checkWorldBounds = true;
+                bullet.outOfBoundsKill = true;
                 bullet.reset(Pou.body.x + 90, Pou.body.y + 20);
                 bullet.body.velocity.x = 300;
                 bullet.body.velocity.y = 0;
             } else if (dirPou == 2) {
+                bullet = bulletPool.getFirstDead();
+                if (bullet === null || bullet === undefined) return;
+                bullet.revive();
+                bullet.checkWorldBounds = true;
+                bullet.outOfBoundsKill = true;
                 bullet.reset(Pou.body.x, Pou.body.y + 20);
                 bullet.body.velocity.x = -300;
                 bullet.body.velocity.y = 0;
