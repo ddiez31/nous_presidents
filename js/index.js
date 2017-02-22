@@ -4,13 +4,16 @@ $(document).ready(function() {
     var game = new Phaser.Game(winW, winH, Phaser.AUTO, '', { preload: preload, create: create, update: update });
     var platform, word, bouton, background;
     var Trump, Kim, Pou;
-    var cursors, button
+    var cursors, button;
     var weapon, bullet;
     var bulletPool;
     var scoreTrump = 0;
     var scoreKim = 0;
     var scorePou = 0;
     var scoreTextTrump, scoreTextKim, scoreTextPou;
+    var direction = 0;
+    var shootWhileStanding;
+
 
 
     function preload() {
@@ -102,8 +105,7 @@ $(document).ready(function() {
         game.physics.arcade.enable(Pou);
 
         // bouton vote
-        // game.add.image(game.world.centerX - 95, game.world.centerY - 95, 'bouton').scale.setTo(0.5, 0.5);
-        button = game.add.button(game.world.centerX - 95, game.world.centerY - 95, 'bouton', actionOnClick, this, 2, 1, 0).scale.setTo(0.5, 0.5);
+        // button = game.add.button(game.world.centerX - 95, game.world.centerY - 95, 'bouton', actionOnClick, this, 2, 1, 0).scale.setTo(0.5, 0.5);
 
 
 
@@ -260,31 +262,77 @@ $(document).ready(function() {
 
         // gestion tir player
         $(window).keypress(function(e) {
-            if (e.keyCode === 32) {
-                // Get a dead bullet from the pool
-                bullet = bulletPool.getFirstDead();
+            if (cursors.right.isDown) {
+                direction = 1;
+                console.log('dir = ' + direction);
+            } else if (cursors.left.isDown) {
+                direction = 2;
+                console.log('dir = ' + direction);
 
-                // If there aren't any bullets available then don't shoot
-                if (bullet === null || bullet === undefined) return;
 
-                // Revive the bullet
-                // This makes the bullet "alive"
-                bullet.revive();
+                $(window).keypress(function(e) {
+                    if (e.keyCode === 32 && direction === 1) {
+                        // Get a dead bullet from the pool
+                        var bullet = bulletPool.getFirstDead();
 
-                // Bullets should kill themselves when they leave the world.
-                // Phaser takes care of this for me by setting this flag
-                // but you can do it yourself by killing the bullet if
-                // its x,y coordinates are outside of the world.
-                bullet.checkWorldBounds = true;
-                bullet.outOfBoundsKill = true;
+                        // If there aren't any bullets available then don't shoot
+                        if (bullet === null || bullet === undefined) return;
 
-                // Set the bullet position to the gun position.
-                bullet.reset(Trump.body.x, Trump.body.y);
+                        // Revive the bullet
+                        // This makes the bullet "alive"
+                        bullet.revive();
 
-                // Shoot it
-                bullet.body.velocity.x = 200;
-                bullet.body.velocity.y = 0;
+                        // Bullets should kill themselves when they leave the world.
+                        // Phaser takes care of this for me by setting this flag
+                        // but you can do it yourself by killing the bullet if
+                        // its x,y coordinates are outside of the world.
+                        bullet.checkWorldBounds = true;
+                        bullet.outOfBoundsKill = true;
+
+                        // Set the bullet position to the gun position.
+                        bullet.reset(Trump.body.x + 90, Trump.body.y + 20);
+
+
+                        // Shoot it
+                        bullet.body.velocity.x = 200;
+                        bullet.body.velocity.y = 0;
+                        console.log('space + right');
+                        direction = 1;
+                    }
+                });
+
+                $(window).keypress(function(e) {
+                    if (e.keyCode === 32 && direction === 2) {
+                        // Get a dead bullet from the pool
+                        var bullet = bulletPool.getFirstDead();
+
+                        // If there aren't any bullets available then don't shoot
+                        if (bullet === null || bullet === undefined) return;
+
+                        // Revive the bullet
+                        // This makes the bullet "alive"
+                        bullet.revive();
+
+                        // Bullets should kill themselves when they leave the world.
+                        // Phaser takes care of this for me by setting this flag
+                        // but you can do it yourself by killing the bullet if
+                        // its x,y coordinates are outside of the world.
+                        bullet.checkWorldBounds = true;
+                        bullet.outOfBoundsKill = true;
+
+                        // Set the bullet position to the gun position.
+                        bullet.reset(Trump.body.x, Trump.body.y + 20);
+
+
+                        // Shoot it
+                        bullet.body.velocity.x = -200;
+                        bullet.body.velocity.y = 0;
+                        console.log('space + right');
+                        direction = 2;
+                    }
+                });
             }
         });
+
     }
 });
