@@ -16,10 +16,10 @@ $(document).ready(function() {
     var direction = 0;
     var shootWhileStanding;
 
-
+    // konami code
     if (window.addEventListener) {
-        var kkeys = [],
-            konami = "38,38,40,40,37,39,37,39,66,65";
+        var kkeys = [];
+        konami = "38,38,40,40,37,39,37,39,66,65";
         konami2 = "13";
         window.addEventListener("keydown", function(e) {
             kkeys.push(e.keyCode);
@@ -28,20 +28,12 @@ $(document).ready(function() {
                 video.addToWorld(0, 0, 0, 0, 2.5, 2.5);
                 video.play(true);
                 if (kkeys.toString().indexOf(konami2) >= 0) {
+                    kkeys = [];
                     game.state.restart();
                 }
             }
-
-
-
         });
     };
-
-
-
-
-
-
 
     function preload() {
         background = game.load.image('background', '../images/scene.jpg');
@@ -134,8 +126,7 @@ $(document).ready(function() {
         game.physics.arcade.enable(Pou);
 
         // bouton vote
-        // button = game.add.button(game.world.centerX - 95, game.world.centerY - 95, 'bouton', actionOnClick, this, 2, 1, 0).scale.setTo(0.5, 0.5);
-
+        button = game.add.button(game.world.centerX - 95, game.world.centerY - 95, 'bouton', actionOnClick, this, 2, 1, 0).scale.setTo(0.5, 0.5);
 
 
         // animations perso
@@ -172,17 +163,10 @@ $(document).ready(function() {
         scoreTextKim = game.add.text(20, 16, 'Kim Jong-un: 0', { fontSize: '18px', fill: '#fff' });
         scoreTextPou = game.add.text(660, 16, 'Poutine: 0', { fontSize: '18px', fill: '#fff' });
 
-
+        // musique
         music = game.add.audio('zik');
         music.loopFull(0.9);
         music.play();
-
-
-
-
-
-
-
 
         // armes tir
         weapon = game.add.weapon(60, 'bullet');
@@ -209,8 +193,6 @@ $(document).ready(function() {
 
 
     // déplacements aléatoires robots
-
-
     function startKim() {
         var botKim = game.rnd.integerInRange(1, 5);
         if (botKim == 1) {
@@ -274,7 +256,7 @@ $(document).ready(function() {
 
     // gestion bouton
     function actionOnClick() {
-        console.log("ok");
+        game.state.restart();
     }
 
 
@@ -302,89 +284,44 @@ $(document).ready(function() {
         if (cursors.up.isDown) {
             Trump.body.velocity.y = -800;
         }
-
-
-
-
-
-
-
-
-        // gestion tir player
-        $(window).keypress(function(e) {
-            if (cursors.right.isDown) {
-                direction = 1;
-                console.log('dir = ' + direction);
-            } else if (cursors.left.isDown) {
-                direction = 2;
-                console.log('dir = ' + direction);
-
-
-                $(window).keypress(function(e) {
-                    if (e.keyCode === 32 && direction === 1) {
-                        // Get a dead bullet from the pool
-                        var bullet = bulletPool.getFirstDead();
-
-                        // If there aren't any bullets available then don't shoot
-                        if (bullet === null || bullet === undefined) return;
-
-                        // Revive the bullet
-                        // This makes the bullet "alive"
-                        bullet.revive();
-
-                        // Bullets should kill themselves when they leave the world.
-                        // Phaser takes care of this for me by setting this flag
-                        // but you can do it yourself by killing the bullet if
-                        // its x,y coordinates are outside of the world.
-                        bullet.checkWorldBounds = true;
-                        bullet.outOfBoundsKill = true;
-
-                        // Set the bullet position to the gun position.
-                        bullet.reset(Trump.body.x + 90, Trump.body.y + 20);
-
-
-                        // Shoot it
-                        bullet.body.velocity.x = 200;
-                        bullet.body.velocity.y = 0;
-                        console.log('space + right');
-                        direction = 1;
-                    }
-                });
-
-                $(window).keypress(function(e) {
-                    if (e.keyCode === 32 && direction === 2) {
-                        // Get a dead bullet from the pool
-                        var bullet = bulletPool.getFirstDead();
-
-                        // If there aren't any bullets available then don't shoot
-                        if (bullet === null || bullet === undefined) return;
-
-                        // Revive the bullet
-                        // This makes the bullet "alive"
-                        bullet.revive();
-
-                        // Bullets should kill themselves when they leave the world.
-                        // Phaser takes care of this for me by setting this flag
-                        // but you can do it yourself by killing the bullet if
-                        // its x,y coordinates are outside of the world.
-                        bullet.checkWorldBounds = true;
-                        bullet.outOfBoundsKill = true;
-
-                        // Set the bullet position to the gun position.
-                        bullet.reset(Trump.body.x, Trump.body.y + 20);
-
-
-                        // Shoot it
-                        bullet.body.velocity.x = -200;
-                        bullet.body.velocity.y = 0;
-                        console.log('space + right');
-                        direction = 2;
-                    }
-                });
-            }
-        });
     }
 
+    // gestion tir player
+    $(window).keypress(function(e) {
+        if (cursors.right.isDown) {
+            direction = 1;
+        } else if (cursors.left.isDown) {
+            direction = 2;
+
+            $(window).keypress(function(e) {
+                if (e.keyCode === 32 && direction === 1) {
+                    bullet = bulletPool.getFirstDead();
+                    if (bullet === null || bullet === undefined) return;
+                    bullet.revive();
+                    bullet.checkWorldBounds = true;
+                    bullet.outOfBoundsKill = true;
+                    bullet.reset(Trump.body.x + 90, Trump.body.y + 20);
+                    bullet.body.velocity.x = 200;
+                    bullet.body.velocity.y = 0;
+                    direction = 1;
+                }
+            });
+
+            $(window).keypress(function(e) {
+                if (e.keyCode === 32 && direction === 2) {
+                    bullet = bulletPool.getFirstDead();
+                    if (bullet === null || bullet === undefined) return;
+                    bullet.revive();
+                    bullet.checkWorldBounds = true;
+                    bullet.outOfBoundsKill = true;
+                    bullet.reset(Trump.body.x, Trump.body.y + 20);
+                    bullet.body.velocity.x = -200;
+                    bullet.body.velocity.y = 0;
+                    direction = 2;
+                }
+            });
+        }
+    });
 
     function render() {
         game.debug.soundInfo(music, 20, 32);
