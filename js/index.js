@@ -15,6 +15,7 @@ $(document).ready(function() {
     var video;
     var direction = 2;
     var shootWhileStanding;
+    var dirKim, dirPou;
 
     // konami code
     if (window.addEventListener) {
@@ -198,16 +199,24 @@ $(document).ready(function() {
         if (botKim == 1) {
             Kim.body.velocity.x = 300;
             Kim.animations.play('right', 10, true);
+            dirKim = 1;
         } else if (botKim == 2) {
             Kim.body.velocity.x = -300;
             Kim.animations.play('left', 10, true);
+            dirKim = 2;
         } else if (botKim == 3) {
             Kim.body.velocity.y = -800;
             Kim.animations.stop();
         } else if (botKim == 4 || botKim == 5) {
-            // bullet.reset(Kim.body.x, Kim.body.y);
-            // bullet.body.velocity.x = 200;
-            // bullet.body.velocity.y = 0;
+            if (dirKim == 1) {
+                bullet.reset(Kim.body.x + 90, Kim.body.y + 20);
+                bullet.body.velocity.x = 300;
+                bullet.body.velocity.y = 0;
+            } else if (dirKim == 2) {
+                bullet.reset(Kim.body.x, Kim.body.y + 20);
+                bullet.body.velocity.x = -300;
+                bullet.body.velocity.y = 0;
+            }
         } else {
             Kim.body.velocity.x = 0;
             Kim.animations.stop();
@@ -219,16 +228,24 @@ $(document).ready(function() {
         if (botPou == 1) {
             Pou.body.velocity.x = 300;
             Pou.animations.play('right', 10, true);
+            dirPou = 1;
         } else if (botPou == 2) {
             Pou.body.velocity.x = -300;
             Pou.animations.play('left', 10, true);
+            dirPou = 2;
         } else if (botPou == 3) {
             Pou.body.velocity.y = -800;
             Pou.animations.stop();
         } else if (botPou == 4 || botPou == 5) {
-            // bullet.reset(Pou.body.x, Pou.body.y);
-            // bullet.body.velocity.x = 200;
-            // bullet.body.velocity.y = 0;
+            if (dirPou == 1) {
+                bullet.reset(Pou.body.x + 90, Pou.body.y + 20);
+                bullet.body.velocity.x = 300;
+                bullet.body.velocity.y = 0;
+            } else if (dirPou == 2) {
+                bullet.reset(Pou.body.x, Pou.body.y + 20);
+                bullet.body.velocity.x = -300;
+                bullet.body.velocity.y = 0;
+            }
         } else {
             Pou.body.velocity.x = 0;
             Pou.animations.stop();
@@ -315,7 +332,6 @@ $(document).ready(function() {
             }
         };
     });
-
 
     function render() {
         game.debug.soundInfo(music, 20, 32);
