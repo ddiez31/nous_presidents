@@ -15,11 +15,13 @@ $(document).ready(function() {
     var video;
     var direction = 0;
     var shootWhileStanding;
+    var timer;
+    var total = 0;
 
 
     if (window.addEventListener) {
-        var kkeys = [],
-            konami = "38,38,40,40,37,39,37,39,66,65";
+        var kkeys = [];
+        konami = "38,38,40,40,37,39,37,39,66,65";
         konami2 = "13";
         window.addEventListener("keydown", function(e) {
             kkeys.push(e.keyCode);
@@ -28,6 +30,7 @@ $(document).ready(function() {
                 video.addToWorld(0, 0, 0, 0, 2.5, 2.5);
                 video.play(true);
                 if (kkeys.toString().indexOf(konami2) >= 0) {
+                    kkeys = [];
                     game.state.restart();
                 }
             }
@@ -50,7 +53,7 @@ $(document).ready(function() {
         game.load.spritesheet('Kim', '../images/SpriteKim.png', 124, 140, 8);
         game.load.spritesheet('Pou', '../images/SpritePoutine.png', 124, 140, 8);
         game.load.image('bullet', '../images/persoKim.png');
-        game.load.audio('zik', '../audio/Double_Dragon_NES_Music_-_Title_Theme.ogg');
+        game.load.audio('zik', '../audio/Street_Fighter_II_Music_-_Guile_-_HQ.ogg');
         game.load.video('champi', '../video/champignon.mp4');
         game.load.image('bouton', '../images/bouton_vote.png');
     }
