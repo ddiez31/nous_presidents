@@ -13,7 +13,7 @@ $(document).ready(function() {
     var scoreTextTrump, scoreTextKim, scoreTextPou;
     var music;
     var video;
-    var direction = 0;
+    var direction = 2;
     var shootWhileStanding;
 
     // konami code
@@ -205,9 +205,9 @@ $(document).ready(function() {
             Kim.body.velocity.y = -800;
             Kim.animations.stop();
         } else if (botKim == 4 || botKim == 5) {
-            bullet.reset(Kim.body.x, Kim.body.y);
-            bullet.body.velocity.x = 200;
-            bullet.body.velocity.y = 0;
+            // bullet.reset(Kim.body.x, Kim.body.y);
+            // bullet.body.velocity.x = 200;
+            // bullet.body.velocity.y = 0;
         } else {
             Kim.body.velocity.x = 0;
             Kim.animations.stop();
@@ -226,9 +226,9 @@ $(document).ready(function() {
             Pou.body.velocity.y = -800;
             Pou.animations.stop();
         } else if (botPou == 4 || botPou == 5) {
-            bullet.reset(Pou.body.x, Pou.body.y);
-            bullet.body.velocity.x = 200;
-            bullet.body.velocity.y = 0;
+            // bullet.reset(Pou.body.x, Pou.body.y);
+            // bullet.body.velocity.x = 200;
+            // bullet.body.velocity.y = 0;
         } else {
             Pou.body.velocity.x = 0;
             Pou.animations.stop();
@@ -261,23 +261,26 @@ $(document).ready(function() {
 
 
     function update() {
-        // déplacement player
         // game.physics.arcade.collide(Kim, Pou);
         // game.physics.arcade.collide(Kim, Trump);
         // game.physics.arcade.collide(Pou, Trump);
 
         game.physics.arcade.collide(Kim, platform);
         game.physics.arcade.collide(Pou, platform);
+        game.physics.arcade.collide(Trump, platform);
+
+        // déplacement player
         cursors = game.input.keyboard.createCursorKeys();
         Trump.body.velocity.x = 0;
-        game.physics.arcade.collide(Trump, platform);
 
         if (cursors.left.isDown) {
             Trump.body.velocity.x = -200;
             Trump.animations.play("left");
+            direction = 2;
         } else if (cursors.right.isDown) {
             Trump.body.velocity.x = 200;
             Trump.animations.play("right");
+            direction = 1;
         } else {
             Trump.animations.stop();
         }
@@ -288,40 +291,31 @@ $(document).ready(function() {
 
     // gestion tir player
     $(window).keypress(function(e) {
-        if (cursors.right.isDown) {
-            direction = 1;
-        } else if (cursors.left.isDown) {
-            direction = 2;
-
-            $(window).keypress(function(e) {
-                if (e.keyCode === 32 && direction === 1) {
-                    bullet = bulletPool.getFirstDead();
-                    if (bullet === null || bullet === undefined) return;
-                    bullet.revive();
-                    bullet.checkWorldBounds = true;
-                    bullet.outOfBoundsKill = true;
-                    bullet.reset(Trump.body.x + 90, Trump.body.y + 20);
-                    bullet.body.velocity.x = 200;
-                    bullet.body.velocity.y = 0;
-                    direction = 1;
-                }
-            });
-
-            $(window).keypress(function(e) {
-                if (e.keyCode === 32 && direction === 2) {
-                    bullet = bulletPool.getFirstDead();
-                    if (bullet === null || bullet === undefined) return;
-                    bullet.revive();
-                    bullet.checkWorldBounds = true;
-                    bullet.outOfBoundsKill = true;
-                    bullet.reset(Trump.body.x, Trump.body.y + 20);
-                    bullet.body.velocity.x = -200;
-                    bullet.body.velocity.y = 0;
-                    direction = 2;
-                }
-            });
-        }
+        if (e.keyCode = 32) {
+            if (direction == 1) {
+                bullet = bulletPool.getFirstDead();
+                if (bullet === null || bullet === undefined) return;
+                bullet.revive();
+                bullet.checkWorldBounds = true;
+                bullet.outOfBoundsKill = true;
+                bullet.reset(Trump.body.x + 90, Trump.body.y + 20);
+                bullet.body.velocity.x = 200;
+                bullet.body.velocity.y = 0;
+                direction = 1;
+            } else if (direction == 2) {
+                bullet = bulletPool.getFirstDead();
+                if (bullet === null || bullet === undefined) return;
+                bullet.revive();
+                bullet.checkWorldBounds = true;
+                bullet.outOfBoundsKill = true;
+                bullet.reset(Trump.body.x, Trump.body.y + 20);
+                bullet.body.velocity.x = -200;
+                bullet.body.velocity.y = 0;
+                direction = 2;
+            }
+        };
     });
+
 
     function render() {
         game.debug.soundInfo(music, 20, 32);
