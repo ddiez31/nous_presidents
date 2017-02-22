@@ -11,6 +11,8 @@ $(document).ready(function() {
     var scoreKim = 0;
     var scorePou = 0;
     var scoreTextTrump, scoreTextKim, scoreTextPou;
+    var direction = 0;
+    var shootWhileStanding;
 
 
 
@@ -235,9 +237,21 @@ $(document).ready(function() {
         if (cursors.up.isDown) {
             Trump.body.velocity.y = -800;
         }
+        
 
         $(window).keypress(function (e) {
-                if (e.keyCode === 32 && cursors.right.isDown) {
+                if (cursors.right.isDown){
+                    direction = 1;
+                console.log('dir = ' + direction);
+                }else if (cursors.left.isDown){
+                    direction = 2;
+                    console.log('dir = ' + direction);
+
+
+
+
+        $(window).keypress(function (e) {
+                if (e.keyCode === 32 && direction === 1) {
                     // Get a dead bullet from the pool
                     var bullet = bulletPool.getFirstDead();
 
@@ -263,11 +277,12 @@ $(document).ready(function() {
                     bullet.body.velocity.x = 200;
                     bullet.body.velocity.y = 0;
                     console.log('space + right');
+                    direction = 1;
                 }
             });
 
         $(window).keypress(function (e) {
-                if (e.keyCode === 32 && cursors.left.isDown) {
+                if (e.keyCode === 32 && direction === 2) {
                     // Get a dead bullet from the pool
                     var bullet = bulletPool.getFirstDead();
 
@@ -293,9 +308,11 @@ $(document).ready(function() {
                     bullet.body.velocity.x = -200;
                     bullet.body.velocity.y = 0;
                     console.log('space + right');
+                    direction = 2;
                 }
             });
-
+    }
+});
 
 }
 });
