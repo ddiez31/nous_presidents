@@ -11,6 +11,31 @@ $(document).ready(function() {
     var scoreKim = 0;
     var scorePou = 0;
     var scoreTextTrump, scoreTextKim, scoreTextPou;
+    var music;
+    var video;
+
+
+    if (window.addEventListener) {
+        var kkeys = [],
+            konami = "38,38,40,40,37,39,37,39,66,65";
+        konami2 = "13";
+        window.addEventListener("keydown", function(e) {
+            kkeys.push(e.keyCode);
+            if (kkeys.toString().indexOf(konami) >= 0) {
+                video = game.add.video('champi');
+                video.addToWorld(0, 0, 0, 0, 2.5, 2.5);
+                video.play(true);
+                if (kkeys.toString().indexOf(konami2) >= 0) {
+                    game.state.restart();
+                }
+            }
+
+
+
+        });
+    };
+
+
 
 
     function preload() {
@@ -20,6 +45,8 @@ $(document).ready(function() {
         game.load.spritesheet('Kim', '../images/SpriteKim.png', 124, 140, 8);
         game.load.spritesheet('Pou', '../images/SpritePoutine.png', 124, 140, 8);
         game.load.image('bullet', '../images/persoKim.png');
+        game.load.audio('zik', '../audio/Double_Dragon_NES_Music_-_Title_Theme.ogg');
+        game.load.video('champi', '../video/champignon.mp4');
     }
 
     function create() {
@@ -127,9 +154,18 @@ $(document).ready(function() {
         scoreTextKim = game.add.text(20, 16, 'Kim Jong-un: 0', { fontSize: '18px', fill: '#fff' });
         scoreTextPou = game.add.text(660, 16, 'Poutine: 0', { fontSize: '18px', fill: '#fff' });
 
+        music = game.add.audio('zik');
+        music.loopFull(0.9);
+        music.play();
+
+
+
+
+
+
         // thibault :
 
-        weapon = game.add.weapon(60 , 'bullet');
+        weapon = game.add.weapon(60, 'bullet');
 
         weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
 
@@ -137,7 +173,7 @@ $(document).ready(function() {
 
         // Create an object pool of bullets
         bulletPool = this.game.add.group();
-        for(var i = 0; i < 20; i++) {
+        for (var i = 0; i < 20; i++) {
             // Create each bullet and add it to the group.
             var bullet = this.game.add.sprite(0, 0, 'bullet');
             bulletPool.add(bullet);
@@ -151,6 +187,10 @@ $(document).ready(function() {
             // Set its initial state to "dead".
             bullet.kill();
         }
+    }
+
+    function musique() {
+
     }
 
     function startKim() {
@@ -216,6 +256,7 @@ $(document).ready(function() {
         // game.physics.arcade.collide(Kim, Pou);
         // game.physics.arcade.collide(Kim, Trump);
         // game.physics.arcade.collide(Pou, Trump);
+
         game.physics.arcade.collide(Kim, platform);
         game.physics.arcade.collide(Pou, platform);
         cursors = game.input.keyboard.createCursorKeys();
@@ -235,32 +276,37 @@ $(document).ready(function() {
             Trump.body.velocity.y = -800;
         }
 
-        $(window).keypress(function (e) {
-                if (e.keyCode === 32) {
-                    // Get a dead bullet from the pool
-                    var bullet = bulletPool.getFirstDead();
+        $(window).keypress(function(e) {
+            if (e.keyCode === 32) {
+                // Get a dead bullet from the pool
+                var bullet = bulletPool.getFirstDead();
 
-                    // If there aren't any bullets available then don't shoot
-                    if (bullet === null || bullet === undefined) return;
+                // If there aren't any bullets available then don't shoot
+                if (bullet === null || bullet === undefined) return;
 
-                    // Revive the bullet
-                    // This makes the bullet "alive"
-                    bullet.revive();
+                // Revive the bullet
+                // This makes the bullet "alive"
+                bullet.revive();
 
-                    // Bullets should kill themselves when they leave the world.
-                    // Phaser takes care of this for me by setting this flag
-                    // but you can do it yourself by killing the bullet if
-                    // its x,y coordinates are outside of the world.
-                    bullet.checkWorldBounds = true;
-                    bullet.outOfBoundsKill = true;
+                // Bullets should kill themselves when they leave the world.
+                // Phaser takes care of this for me by setting this flag
+                // but you can do it yourself by killing the bullet if
+                // its x,y coordinates are outside of the world.
+                bullet.checkWorldBounds = true;
+                bullet.outOfBoundsKill = true;
 
-                    // Set the bullet position to the gun position.
-                    bullet.reset(Trump.body.x, Trump.body.y);
+                // Set the bullet position to the gun position.
+                bullet.reset(Trump.body.x, Trump.body.y);
 
-                    // Shoot it
-                    bullet.body.velocity.x = 200;
-                    bullet.body.velocity.y = 0;
-                }
-            });
-}
+                // Shoot it
+                bullet.body.velocity.x = 200;
+                bullet.body.velocity.y = 0;
+            }
+        });
+    }
+
+    function render() {
+        game.debug.soundInfo(music, 20, 32);
+    }
+
 });
