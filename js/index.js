@@ -5,12 +5,13 @@ $(document).ready(function() {
     var platform, word;
     var Trump, Kim, Pou;
     var cursors;
-    var weapon;
+    var weapon, bullet;
     var bulletPool;
     var scoreTrump = 0;
     var scoreKim = 0;
     var scorePou = 0;
     var scoreTextTrump, scoreTextKim, scoreTextPou;
+
 
 
     function preload() {
@@ -255,7 +256,8 @@ $(document).ready(function() {
                     bullet.outOfBoundsKill = true;
 
                     // Set the bullet position to the gun position.
-                    bullet.reset(Trump.body.x, Trump.body.y);
+                    bullet.reset(Trump.body.x + 90, Trump.body.y + 20);
+
 
                     // Shoot it
                     bullet.body.velocity.x = 200;
