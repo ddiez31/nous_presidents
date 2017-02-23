@@ -15,9 +15,9 @@ $(document).ready(function() {
     var video;
     var direction = 2;
     var shootWhileStanding;
-    var timer;
-    var total = 0;
     var dirKim, dirPou;
+    var final;
+
 
 
     // konami code
@@ -49,11 +49,18 @@ $(document).ready(function() {
         game.load.audio('zik', '../audio/Street_Fighter_II_Music_-_Guile_-_HQ.ogg');
         game.load.video('champi', '../video/champignon.mp4');
         game.load.image('bouton', '../images/bouton_vote.png');
+        game.load.image('final', '../images/elysee2.jpg');
+
     }
+
+    var totalTime = 10;
+    var timeElapsed = 0;
+    var gameTimer;
 
     function create() {
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.add.image(0, 0, 'background');
+
 
         // plateformes
         platform = game.add.group();
@@ -120,6 +127,15 @@ $(document).ready(function() {
         ledge = platform.create(300, 150, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
+
+        //Timer
+        startTime = new Date();
+
+        createTimer();
+        gameTimer = game.time.events.loop(100, function() {
+            updateTimer();
+        });
+
 
         //sprites perso
         Trump = game.add.sprite(350, game.world.height - 180, 'Trump');
@@ -193,7 +209,46 @@ $(document).ready(function() {
             // Set its initial state to "dead".
             bullet.kill();
         }
+
     }
+
+    //Timer
+    function createTimer() {
+        timeLabel = game.add.text(705, 45, "00:00", { fontSize: '36px', fill: '#fff' });
+        timeLabel.anchor.setTo(0.5, 0);
+        timeLabel.align = 'center';
+    };
+
+    function updateTimer() {
+        // var me = this;
+        var currentTime = new Date();
+        var timeDifference = startTime.getTime() - currentTime.getTime();
+
+        //Time elapsed in seconds
+        timeElapsed = Math.abs(timeDifference / 1000);
+
+        //Time remaining in seconds
+        var timeRemaining = totalTime - timeElapsed;
+
+        //Convert seconds into minutes and seconds
+        var minutes = Math.floor(timeRemaining / 60);
+        var seconds = Math.floor(timeRemaining) - (60 * minutes);
+
+        //Display minutes, add a 0 to the start if less than 10
+        var result = (minutes < 10) ? "0" + minutes : minutes;
+
+        //Display seconds, add a 0 to the start if less than 10
+        result += (seconds < 10) ? ":0" + seconds : ":" + seconds;
+
+        timeLabel.text = result;
+
+        if (timeElapsed >= totalTime) {
+            // timeLabel.text = "00:00";
+            image = game.add.image(0, 0, 'final');
+            image.scale.setTo(game.world.width, game.world.height);
+        }
+
+    };
 
 
     // déplacements aléatoires robots
@@ -218,7 +273,7 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Kim.body.x + 90, Kim.body.y + 20);
-                bullet.body.velocity.x = 300;
+                bullet.body.velocity.x = 1000;
                 bullet.body.velocity.y = 0;
             } else if (dirKim == 2) {
                 bullet = bulletPool.getFirstDead();
@@ -239,11 +294,11 @@ $(document).ready(function() {
     function startPou() {
         var botPou = game.rnd.integerInRange(1, 5);
         if (botPou == 1) {
-            Pou.body.velocity.x = 300;
+            Pou.body.velocity.x = 400;
             Pou.animations.play('right', 10, true);
             dirPou = 1;
         } else if (botPou == 2) {
-            Pou.body.velocity.x = -300;
+            Pou.body.velocity.x = -400;
             Pou.animations.play('left', 10, true);
             dirPou = 2;
         } else if (botPou == 3) {
@@ -257,7 +312,7 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Pou.body.x + 90, Pou.body.y + 20);
-                bullet.body.velocity.x = 300;
+                bullet.body.velocity.x = 400;
                 bullet.body.velocity.y = 0;
             } else if (dirPou == 2) {
                 bullet = bulletPool.getFirstDead();
@@ -266,7 +321,7 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Pou.body.x, Pou.body.y + 20);
-                bullet.body.velocity.x = -300;
+                bullet.body.velocity.x = -400;
                 bullet.body.velocity.y = 0;
             }
         } else {
@@ -300,10 +355,16 @@ $(document).ready(function() {
     }
 
 
+
+
+
+
+
     function update() {
         // game.physics.arcade.collide(Kim, Pou);
         // game.physics.arcade.collide(Kim, Trump);
         // game.physics.arcade.collide(Pou, Trump);
+
 
         game.physics.arcade.collide(Kim, platform);
         game.physics.arcade.collide(Pou, platform);
@@ -339,7 +400,7 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Trump.body.x + 90, Trump.body.y + 20);
-                bullet.body.velocity.x = 200;
+                bullet.body.velocity.x = 300;
                 bullet.body.velocity.y = 0;
                 direction = 1;
             } else if (direction == 2) {
@@ -349,14 +410,17 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Trump.body.x, Trump.body.y + 20);
-                bullet.body.velocity.x = -200;
+                bullet.body.velocity.x = -300;
                 bullet.body.velocity.y = 0;
                 direction = 2;
             }
         };
     });
 
+
+
     function render() {
         game.debug.soundInfo(music, 20, 32);
+
     }
 });
