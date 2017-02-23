@@ -2,7 +2,7 @@ $(document).ready(function() {
     var winW = $(this).offsetWidth;
     var winH = $(this).offsetHeight;
     var game = new Phaser.Game(winW, winH, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-    var platform, word, bouton, background;
+    var platform, word, bouton, background, ground, ledge;
     var Trump, Kim, Pou;
     var cursors, button;
     var weapon, bullet;
@@ -59,7 +59,7 @@ $(document).ready(function() {
         // plateformes
         platform = game.add.group();
         platform.enableBody = true;
-        var ground = platform.create(-10, game.world.height - 45, 'platform');
+        ground = platform.create(-10, game.world.height - 45, 'platform');
         ground.body.immovable = true;
         ground = platform.create(70, game.world.height - 45, 'platform');
         ground.body.immovable = true;
@@ -79,30 +79,27 @@ $(document).ready(function() {
         ground.body.immovable = true;
         ground = platform.create(710, game.world.height - 45, 'platform');
         ground.body.immovable = true;
-        var ledge = platform.create(400, 350, 'platform');
+        ledge = platform.create(400, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(440, 350, 'platform');
+        ledge = platform.create(440, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(480, 350, 'platform');
+        ledge = platform.create(480, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(520, 350, 'platform');
+        ledge = platform.create(520, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(560, 350, 'platform');
+        ledge = platform.create(560, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(600, 350, 'platform');
+        ledge = platform.create(600, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(640, 350, 'platform');
+        ledge = platform.create(640, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        // ledge = platform.create(40, 150, 'platform');
-        // ledge.scale.setTo(0.5, 0.5);
-        // ledge.body.immovable = true;
         ledge = platform.create(100, 150, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
@@ -269,38 +266,45 @@ $(document).ready(function() {
     }
 
     // gestion scores perso
-    function collectWord(Trump, word) {
-        word.kill();
+    function collectWordTrump(Trump, bullet) {
+        // bullet.kill();
         scoreTrump += 10;
         scoreTextTrump.text = 'Trump: ' + scoreTrump;
     }
 
-    function collectWord(Kim, word) {
-        word.kill();
+    function collectWordKim(Kim, bullet) {
+        // bullet.kill();
         scoreKim += 10;
         scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
     }
 
-    function collectWord(Pou, word) {
-        word.kill();
+    function collectWordPou(Pou, bullet) {
+        // bullet.kill();
         scorePou += 10;
         scoreTextPou.text = 'Poutine: ' + scorePou;
     }
 
     // gestion bouton
-    function actionOnClick() {
-        game.state.restart();
-    }
+    // function actionOnClick() {
+    //     game.state.restart();
+    // }
 
 
     function update() {
         // game.physics.arcade.collide(Kim, Pou);
         // game.physics.arcade.collide(Kim, Trump);
         // game.physics.arcade.collide(Pou, Trump);
+        // game.debug.body(Trump);
 
         game.physics.arcade.collide(Kim, platform);
         game.physics.arcade.collide(Pou, platform);
         game.physics.arcade.collide(Trump, platform);
+        // game.physics.arcade.collide(Trump, bullet);
+        // game.physics.arcade.collide(Kim, bullet);
+        // game.physics.arcade.collide(Pou, bullet);
+        game.physics.arcade.overlap(bullet, Pou, collectWordPou, null, this);
+        game.physics.arcade.overlap(bullet, Kim, collectWordKim, null, this);
+        game.physics.arcade.overlap(bullet, Trump, collectWordTrump, null, this);
 
         // déplacement player
         cursors = game.input.keyboard.createCursorKeys();
