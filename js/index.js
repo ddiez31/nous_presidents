@@ -19,7 +19,6 @@ $(document).ready(function() {
     var total = 0;
     var dirKim, dirPou;
 
-
     // konami code
     if (window.addEventListener) {
         var kkeys = [];
@@ -130,7 +129,7 @@ $(document).ready(function() {
         game.physics.arcade.enable(Pou);
 
         // bouton vote
-        button = game.add.button(game.world.centerX - 95, game.world.centerY - 95, 'bouton', actionOnClick, this, 2, 1, 0).scale.setTo(0.5, 0.5);
+        // button = game.add.button(game.world.centerX - 95, game.world.centerY - 95, 'bouton', actionOnClick, this, 2, 1, 0).scale.setTo(0.5, 0.5);
 
 
         // animations perso
@@ -218,7 +217,7 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Kim.body.x + 90, Kim.body.y + 20);
-                bullet.body.velocity.x = 300;
+                bullet.body.velocity.x = 400;
                 bullet.body.velocity.y = 0;
             } else if (dirKim == 2) {
                 bullet = bulletPool.getFirstDead();
@@ -227,7 +226,7 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Kim.body.x, Kim.body.y + 20);
-                bullet.body.velocity.x = -300;
+                bullet.body.velocity.x = -400;
                 bullet.body.velocity.y = 0;
             }
         } else {
@@ -257,7 +256,7 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Pou.body.x + 90, Pou.body.y + 20);
-                bullet.body.velocity.x = 300;
+                bullet.body.velocity.x = 400;
                 bullet.body.velocity.y = 0;
             } else if (dirPou == 2) {
                 bullet = bulletPool.getFirstDead();
@@ -266,7 +265,7 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Pou.body.x, Pou.body.y + 20);
-                bullet.body.velocity.x = -300;
+                bullet.body.velocity.x = -400;
                 bullet.body.velocity.y = 0;
             }
         } else {
@@ -327,7 +326,7 @@ $(document).ready(function() {
         if (cursors.up.isDown) {
             Trump.body.velocity.y = -800;
         }
-    }
+    };
 
     // gestion tir player
     $(window).keypress(function(e) {
@@ -339,7 +338,7 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Trump.body.x + 90, Trump.body.y + 20);
-                bullet.body.velocity.x = 200;
+                bullet.body.velocity.x = 300;
                 bullet.body.velocity.y = 0;
                 direction = 1;
             } else if (direction == 2) {
@@ -349,7 +348,7 @@ $(document).ready(function() {
                 bullet.checkWorldBounds = true;
                 bullet.outOfBoundsKill = true;
                 bullet.reset(Trump.body.x, Trump.body.y + 20);
-                bullet.body.velocity.x = -200;
+                bullet.body.velocity.x = -300;
                 bullet.body.velocity.y = 0;
                 direction = 2;
             }
