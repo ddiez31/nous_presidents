@@ -18,6 +18,7 @@ $(document).ready(function() {
     var timer;
     var total = 0;
     var dirKim, dirPou;
+    var jumpButton;
 
     // konami code
     if (window.addEventListener) {
@@ -176,20 +177,12 @@ $(document).ready(function() {
         weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
         weapon.bulletSpeed = 400;
 
-        // Create an object pool of bullets
         bulletPool = this.game.add.group();
         for (var i = 0; i < 20; i++) {
-            // Create each bullet and add it to the group.
             bullet = this.game.add.sprite(0, 0, 'bullet');
             bulletPool.add(bullet);
-
-            // Set its pivot point to the center of the bullet
             bullet.anchor.setTo(0.5, 0.5);
-
-            // Enable physics on the bullet
             this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
-
-            // Set its initial state to "dead".
             bullet.kill();
         }
     }
@@ -206,7 +199,7 @@ $(document).ready(function() {
             Kim.body.velocity.x = -300;
             Kim.animations.play('left', 10, true);
             dirKim = 2;
-        } else if (botKim == 3) {
+        } else if (botKim == 3 && (Kim.body.onFloor() || Kim.body.touching.down)) {
             Kim.body.velocity.y = -800;
             Kim.animations.stop();
         } else if (botKim == 4 || botKim == 5) {
@@ -245,7 +238,7 @@ $(document).ready(function() {
             Pou.body.velocity.x = -300;
             Pou.animations.play('left', 10, true);
             dirPou = 2;
-        } else if (botPou == 3) {
+        } else if (botPou == 3 && (Pou.body.onFloor() || Pou.body.touching.down)) {
             Pou.body.velocity.y = -800;
             Pou.animations.stop();
         } else if (botPou == 4 || botPou == 5) {
@@ -310,6 +303,7 @@ $(document).ready(function() {
 
         // déplacement player
         cursors = game.input.keyboard.createCursorKeys();
+        jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.UP);
         Trump.body.velocity.x = 0;
 
         if (cursors.left.isDown) {
@@ -323,8 +317,8 @@ $(document).ready(function() {
         } else {
             Trump.animations.stop();
         }
-        if (cursors.up.isDown) {
-            Trump.body.velocity.y = -800;
+        if (jumpButton.isDown && (Trump.body.onFloor() || Trump.body.touching.down)) {
+            Trump.body.velocity.y = -600;
         }
     };
 
