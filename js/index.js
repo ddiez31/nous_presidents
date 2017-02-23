@@ -19,7 +19,6 @@ $(document).ready(function() {
     var total = 0;
     var dirKim, dirPou;
 
-
     // konami code
     if (window.addEventListener) {
         var kkeys = [];
@@ -37,7 +36,7 @@ $(document).ready(function() {
                 }
             }
         });
-    };
+    }
 
     function preload() {
         background = game.load.image('background', '../images/scene.jpg');
@@ -45,7 +44,7 @@ $(document).ready(function() {
         game.load.spritesheet('Trump', '../images/SpriteTrump.png', 124, 140, 8);
         game.load.spritesheet('Kim', '../images/SpriteKim.png', 124, 140, 8);
         game.load.spritesheet('Pou', '../images/SpritePoutine.png', 124, 140, 8);
-        game.load.image('bullet', '../images/persoKim.png');
+        game.load.image('bullet', '../images/eco.png');
         game.load.audio('zik', '../audio/Street_Fighter_II_Music_-_Guile_-_HQ.ogg');
         game.load.video('champi', '../video/champignon.mp4');
         game.load.image('bouton', '../images/bouton_vote.png');
