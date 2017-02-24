@@ -346,35 +346,50 @@ $(document).ready(function() {
     }
 
     // gestion scores perso
-    function collectWordTrump() {
+    function collectWordTrumpKim() {
         bulletKim.kill();
+        scoreTrump -= 1;
+        scoreTextTrump.text = 'Trump: ' + scoreTrump;
+        scoreKim += 1;
+        scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
+    }
+
+    function collectWordTrumpPou() {
         bulletPou.kill();
         scoreTrump -= 1;
         scoreTextTrump.text = 'Trump: ' + scoreTrump;
         scorePou += 1;
         scoreTextPou.text = 'Poutine: ' + scorePou;
-        scoreKim += 1;
-        scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
     }
 
-    function collectWordKim() {
+    function collectWordKimTrump() {
         bulletTrump.kill();
+        scoreKim -= 1;
+        scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
+        scoreTrump += 1;
+        scoreTextTrump.text = 'Trump: ' + scoreTrump;
+    }
+
+    function collectWordKimPou() {
         bulletPou.kill();
         scoreKim -= 1;
         scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
         scorePou += 1;
         scoreTextPou.text = 'Poutine: ' + scorePou;
-        scoreTrump += 1;
-        scoreTextTrump.text = 'Trump: ' + scoreTrump;
     }
 
-    function collectWordPou() {
+    function collectWordPouTrump() {
         bulletTrump.kill();
-        bulletKim.kill();
         scorePou -= 1;
         scoreTextPou.text = 'Poutine: ' + scorePou;
         scoreTrump += 1;
         scoreTextTrump.text = 'Trump: ' + scoreTrump;
+    }
+
+    function collectWordPouKim() {
+        bulletKim.kill();
+        scorePou -= 1;
+        scoreTextPou.text = 'Poutine: ' + scorePou;
         scoreKim += 1;
         scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
     }
@@ -383,12 +398,12 @@ $(document).ready(function() {
         game.physics.arcade.collide(Kim, platform);
         game.physics.arcade.collide(Pou, platform);
         game.physics.arcade.collide(Trump, platform);
-        game.physics.arcade.collide(bulletTrump, Pou, collectWordPou, null, this);
-        game.physics.arcade.collide(bulletKim, Pou, collectWordPou, null, this);
-        game.physics.arcade.collide(bulletTrump, Kim, collectWordKim, null, this);
-        game.physics.arcade.collide(bulletPou, Kim, collectWordKim, null, this);
-        game.physics.arcade.collide(bulletKim, Trump, collectWordTrump, null, this);
-        game.physics.arcade.collide(bulletPou, Trump, collectWordTrump, null, this);
+        game.physics.arcade.collide(bulletTrump, Pou, collectWordPouTrump, null, this);
+        game.physics.arcade.collide(bulletKim, Pou, collectWordPouKim, null, this);
+        game.physics.arcade.collide(bulletTrump, Kim, collectWordKimTrump, null, this);
+        game.physics.arcade.collide(bulletPou, Kim, collectWordKimPou, null, this);
+        game.physics.arcade.collide(bulletKim, Trump, collectWordTrumpKim, null, this);
+        game.physics.arcade.collide(bulletPou, Trump, collectWordTrumpPou, null, this);
 
         // déplacement player
         cursors = game.input.keyboard.createCursorKeys();
