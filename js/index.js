@@ -228,8 +228,12 @@ $(document).ready(function() {
 
         if (timeElapsed >= totalTime) {
             game.time.events.remove(gameTimer);
-            image = game.add.sprite(0, 0, 'final');
+            image = game.add.button(0, 0, 'final', actionOnClick);
             image.scale.setTo(0.5, 0.5);
+
+            function actionOnClick() {
+                game.state.restart();
+            }
         }
     };
 
