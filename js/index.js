@@ -85,7 +85,6 @@ $(document).ready(function() {
         return array[Math.floor(Math.random() * array.length)];
     }
 
-
     function create() {
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.add.image(0, 0, 'background');
@@ -212,29 +211,27 @@ $(document).ready(function() {
         music.play();
 
         // armes tir
-        weapon = game.add.weapon(60, 'bouton');
+        weapon = game.add.weapon(1, 'bouton');
         weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
         weapon.bulletSpeed = 400;
 
         bulletPool = this.game.add.group();
-        for (var i = 0; i < 2; i++) {
-            bulletKim = this.game.add.sprite(0, 0, randArray(mots));
-            bulletPou = this.game.add.sprite(0, 0, randArray(mots));
-            bulletTrump = this.game.add.sprite(0, 0, randArray(mots));
-            bulletPool.add(bulletKim);
-            bulletPool.add(bulletPou);
-            bulletPool.add(bulletTrump);
-            bulletKim.anchor.setTo(0.5, 0.5);
-            bulletPou.anchor.setTo(0.5, 0.5);
-            bulletTrump.anchor.setTo(0.5, 0.5);
-            this.game.physics.enable(bulletKim, Phaser.Physics.ARCADE);
-            this.game.physics.enable(bulletPou, Phaser.Physics.ARCADE);
-            this.game.physics.enable(bulletTrump, Phaser.Physics.ARCADE);
-            bulletKim.kill();
-            bulletPou.kill();
-            bulletTrump.kill();
-        };
 
+        bulletKim = this.game.add.sprite(0, 0, randArray(mots));
+        bulletPou = this.game.add.sprite(0, 0, randArray(mots));
+        bulletTrump = this.game.add.sprite(0, 0, randArray(mots));
+        bulletPool.add(bulletKim);
+        bulletPool.add(bulletPou);
+        bulletPool.add(bulletTrump);
+        bulletKim.anchor.setTo(0.5, 0.5);
+        bulletPou.anchor.setTo(0.5, 0.5);
+        bulletTrump.anchor.setTo(0.5, 0.5);
+        this.game.physics.enable(bulletKim, Phaser.Physics.ARCADE);
+        this.game.physics.enable(bulletPou, Phaser.Physics.ARCADE);
+        this.game.physics.enable(bulletTrump, Phaser.Physics.ARCADE);
+        bulletKim.kill();
+        bulletPou.kill();
+        bulletTrump.kill();
     };
 
     //Timer
@@ -257,8 +254,9 @@ $(document).ready(function() {
 
         if (timeElapsed >= totalTime) {
             game.time.events.remove(gameTimer);
-            image = game.add.button(0, 0, 'final', actionOnclick);
+            image = game.add.button(0, 0, 'final', actionOnClick);
             image.scale.setTo(0.5, 0.5);
+            game.add.text(10, 10, "Nouvelle partie? alors un petit clic!", { fontSize: '20px', fill: '#fff' });
 
             function actionOnClick() {
                 game.state.restart();
@@ -268,19 +266,19 @@ $(document).ready(function() {
 
     // déplacements aléatoires robots
     function startKim() {
-        var botKim = game.rnd.integerInRange(1, 5);
+        var botKim = game.rnd.integerInRange(1, 6);
         if (botKim == 1) {
-            Kim.body.velocity.x = 300;
+            Kim.body.velocity.x = 400;
             Kim.animations.play('right', 10, true);
             dirKim = 1;
         } else if (botKim == 2) {
-            Kim.body.velocity.x = -300;
+            Kim.body.velocity.x = -400;
             Kim.animations.play('left', 10, true);
             dirKim = 2;
         } else if (botKim == 3 && (Kim.body.onFloor() || Kim.body.touching.down)) {
             Kim.body.velocity.y = -800;
             Kim.animations.stop();
-        } else if (botKim == 4 || botKim == 5) {
+        } else if (botKim == 4 || botKim == 5 || botKim == 6) {
             if (dirKim == 1) {
                 bulletKim = bulletPool.getFirstDead();
                 if (bulletKim === null || bulletKim === undefined) return;
@@ -307,7 +305,7 @@ $(document).ready(function() {
     }
 
     function startPou() {
-        var botPou = game.rnd.integerInRange(1, 5);
+        var botPou = game.rnd.integerInRange(1, 6);
         if (botPou == 1) {
             Pou.body.velocity.x = 400;
             Pou.animations.play('right', 10, true);
@@ -319,7 +317,7 @@ $(document).ready(function() {
         } else if (botPou == 3 && (Pou.body.onFloor() || Pou.body.touching.down)) {
             Pou.body.velocity.y = -800;
             Pou.animations.stop();
-        } else if (botPou == 4 || botPou == 5) {
+        } else if (botPou == 4 || botPou == 5 || botPou == 6) {
             if (dirPou == 1) {
                 bulletPou = bulletPool.getFirstDead();
                 if (bulletPou === null || bulletPou === undefined) return;
