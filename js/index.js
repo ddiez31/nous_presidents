@@ -21,8 +21,7 @@ $(document).ready(function() {
     var totalTime = 420;
     var timeElapsed = 0;
     var gameTimer;
-    var reset;
-    var esc;
+
 
 
     // konami code
@@ -73,7 +72,6 @@ $(document).ready(function() {
         game.load.image('trumplois', '../images/trumplois.png');
         game.load.image('trumpmedias', '../images/trumpmedias.png');
         game.load.image('trumpobjectif', '../images/trumpobjectif.png');
-
         game.load.audio('zik', '../audio/Street_Fighter_II_Music_-_Guile_-_HQ.ogg');
         game.load.video('champi', '../video/champignon.mp4');
         game.load.image('bouton', '../images/bouton_vote.png');
@@ -204,7 +202,7 @@ $(document).ready(function() {
         game.time.events.repeat(Phaser.Timer.SECOND, 420, startPou);
 
         // scores
-        scoreTextTrump = game.add.text(350, 16, 'Trump', { fontSize: '18px', fill: '#fff' });
+        scoreTextTrump = game.add.text(350, 16, 'Trump: 0', { fontSize: '18px', fill: '#fff' });
         scoreTextKim = game.add.text(20, 16, 'Kim Jong-un: 0', { fontSize: '18px', fill: '#fff' });
         scoreTextPou = game.add.text(660, 16, 'Poutine: 0', { fontSize: '18px', fill: '#fff' });
 
@@ -411,12 +409,6 @@ $(document).ready(function() {
         if (jumpButton.isDown && (Trump.body.onFloor() || Trump.body.touching.down)) {
             Trump.body.velocity.y = -600;
         }
-
-
-        // scores
-
-        scoreTextKim = game.add.text(20, 16, 'Kim Jong-un: 0', { fontSize: '18px', fill: '#fff' });
-        scoreTextPou = game.add.text(660, 16, 'Poutine: 0', { fontSize: '18px', fill: '#fff' });
 
     };
 
