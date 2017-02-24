@@ -18,9 +18,11 @@ $(document).ready(function() {
     var dirKim, dirPou;
     var final;
     var jumpButton;
-    var totalTime = 10;
+    var totalTime = 5;
     var timeElapsed = 0;
     var gameTimer;
+    var reset;
+    var esc;
 
 
     // konami code
@@ -228,8 +230,9 @@ $(document).ready(function() {
 
         if (timeElapsed >= totalTime) {
             game.time.events.remove(gameTimer);
-            image = game.add.sprite(0, 0, 'final');
+            image = game.add.button(0, 0, 'final', actionOnclick);
             image.scale.setTo(0.5, 0.5);
+
         }
     };
 
