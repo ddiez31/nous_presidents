@@ -7,7 +7,7 @@ $(document).ready(function() {
     var cursors, button;
     var weapon, bullet, bulletTrump, bulletPou, bulletKim;
     var bulletPool;
-    var scoreTrump = 0;
+    var scoreTrump = 1;
     var scoreKim = 0;
     var scorePou = 0;
     var scoreTextTrump, scoreTextKim, scoreTextPou;
@@ -18,7 +18,7 @@ $(document).ready(function() {
     var dirKim, dirPou;
     var final;
     var jumpButton;
-    var totalTime = 5;
+    var totalTime = 420;
     var timeElapsed = 0;
     var gameTimer;
     var reset;
@@ -175,7 +175,7 @@ $(document).ready(function() {
         game.time.events.repeat(Phaser.Timer.SECOND, 420, startPou);
 
         // scores
-        scoreTextTrump = game.add.text(350, 16, 'Trump: 0', { fontSize: '18px', fill: '#fff' });
+        scoreTextTrump = game.add.text(350, 16, 'Trump', { fontSize: '18px', fill: '#fff' });
         scoreTextKim = game.add.text(20, 16, 'Kim Jong-un: 0', { fontSize: '18px', fill: '#fff' });
         scoreTextPou = game.add.text(660, 16, 'Poutine: 0', { fontSize: '18px', fill: '#fff' });
 
@@ -233,6 +233,9 @@ $(document).ready(function() {
             image = game.add.button(0, 0, 'final', actionOnclick);
             image.scale.setTo(0.5, 0.5);
 
+            function actionOnClick() {
+                game.state.restart();
+            }
         }
     };
 
@@ -317,36 +320,31 @@ $(document).ready(function() {
 
     // gestion scores perso
     function collectWordTrump() {
-        // bulletKim.kill();
-        // bulletPou.kill();
-        scoreTrump -= 10;
-        scoreTextTrump.text = 'Trump: ' + scoreTrump;
-        scorePou += 10;
-        scoreTextPou.text = 'Poutine: ' + scorePou;
-        scoreKim += 10;
-        scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
+        bulletKim.kill();
+        bulletPou.kill();
+
+        scoreTrump += 1;
+        scoreTextTrump = scoreTrump;
+
     }
 
     function collectWordKim() {
-        // bulletTrump.kill();
-        // bulletPou.kill();
-        scoreKim -= 10;
+        bulletTrump.kill();
+        bulletPou.kill();
+        // scoreKim += 10;
         scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
-        scorePou += 10;
+        // scorePou += 10;
         scoreTextPou.text = 'Poutine: ' + scorePou;
-        scoreTrump += 10;
+        // scoreTrump += 10;
         scoreTextTrump.text = 'Trump: ' + scoreTrump;
     }
 
     function collectWordPou() {
-        // bulletTrump.kill();
-        // bulletKim.kill();
-        scorePou -= 10;
+        bulletTrump.kill();
+        bulletKim.kill();
+        // scorePou += 10;
         scoreTextPou.text = 'Poutine: ' + scorePou;
-        scoreTrump += 10;
-        scoreTextTrump.text = 'Trump: ' + scoreTrump;
-        scoreKim += 10;
-        scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
+
     }
 
     // gestion bouton
@@ -368,12 +366,12 @@ $(document).ready(function() {
         // game.physics.arcade.collide(Trump, bullet);
         // game.physics.arcade.collide(Kim, bullet);
         // game.physics.arcade.collide(Pou, bullet);
-        game.physics.arcade.overlap(bulletTrump, Pou, collectWordPou, null, this);
-        game.physics.arcade.overlap(bulletKim, Pou, collectWordPou, null, this);
-        game.physics.arcade.overlap(bulletTrump, Kim, collectWordKim, null, this);
-        game.physics.arcade.overlap(bulletPou, Kim, collectWordKim, null, this);
-        game.physics.arcade.overlap(bulletKim, Trump, collectWordTrump, null, this);
-        game.physics.arcade.overlap(bulletPou, Trump, collectWordTrump, null, this);
+        game.physics.arcade.collide(bulletTrump, Pou, collectWordPou, null, this);
+        game.physics.arcade.collide(bulletKim, Pou, collectWordPou, null, this);
+        game.physics.arcade.collide(bulletTrump, Kim, collectWordKim, null, this);
+        game.physics.arcade.collide(bulletPou, Kim, collectWordKim, null, this);
+        game.physics.arcade.collide(bulletKim, Kim, collectWordTrump, null, this);
+        game.physics.arcade.collide(bulletPou, Pou, collectWordTrump, null, this);
 
         // déplacement player
         cursors = game.input.keyboard.createCursorKeys();
@@ -394,6 +392,13 @@ $(document).ready(function() {
         if (jumpButton.isDown && (Trump.body.onFloor() || Trump.body.touching.down)) {
             Trump.body.velocity.y = -600;
         }
+
+
+        // scores
+
+        scoreTextKim = game.add.text(20, 16, 'Kim Jong-un: 0', { fontSize: '18px', fill: '#fff' });
+        scoreTextPou = game.add.text(660, 16, 'Poutine: 0', { fontSize: '18px', fill: '#fff' });
+
     };
 
     // gestion tir player
