@@ -52,7 +52,7 @@ $(document).ready(function() {
         game.load.audio('zik', '../audio/Street_Fighter_II_Music_-_Guile_-_HQ.ogg');
         game.load.video('champi', '../video/champignon.mp4');
         game.load.image('bouton', '../images/bouton_vote.png');
-        game.load.image('final', '../images/elysee2.jpg');
+        game.load.image('final', '../images/elysee4.jpg');
 
     }
 
@@ -216,31 +216,20 @@ $(document).ready(function() {
     };
 
     function updateTimer() {
-        // var me = this;
         var currentTime = new Date();
         var timeDifference = startTime.getTime() - currentTime.getTime();
-
-        //Time elapsed in seconds
         timeElapsed = Math.abs(timeDifference / 1000);
-
-        //Time remaining in seconds
         var timeRemaining = totalTime - timeElapsed;
-
-        //Convert seconds into minutes and seconds
         var minutes = Math.floor(timeRemaining / 60);
         var seconds = Math.floor(timeRemaining) - (60 * minutes);
-
-        //Display minutes, add a 0 to the start if less than 10
         var result = (minutes < 10) ? "0" + minutes : minutes;
-
-        //Display seconds, add a 0 to the start if less than 10
         result += (seconds < 10) ? ":0" + seconds : ":" + seconds;
-
         timeLabel.text = result;
 
         if (timeElapsed >= totalTime) {
             game.time.events.remove(gameTimer);
-            // image = game.add.image(0, 0, 'final');
+            image = game.add.sprite(0, 0, 'final');
+            image.scale.setTo(0.5, 0.5);
         }
     };
 
