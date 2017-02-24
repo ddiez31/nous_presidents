@@ -1,9 +1,26 @@
 {
-"Emploi"
-"Securite"
-"Economie" : "/images/eco.png",
-"Ecologie"
-"Climat"
+  "words": [
+    {
+      "id": 1,
+      "Emploi": "/images/emploi.png"
+    },
+    {
+      "id": 2,
+      "Securite": "/images/sécurité.png"
+    },
+    {
+      "id": 3,
+      "Economie": "/images/eco.png"
+    },
+    {
+      "id": 4,
+      "Ecologie": "/images/ecologie.png"
+    },
+  ]
+}
+
+
+/*"Climat"
 "Commerce internationnal"
 "Integration"
 "Projets"
@@ -31,6 +48,4 @@
 "Patronat"
 "Paritarisme"
 "Syndicats"
-"Agriculture"
-
-}
+"Agriculture"*/
