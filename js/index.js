@@ -2,10 +2,10 @@ $(document).ready(function() {
     var winW = $(this).offsetWidth;
     var winH = $(this).offsetHeight;
     var game = new Phaser.Game(winW, winH, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-    var platform, word, bouton, background;
+    var platform, word, bouton, background, ground, ledge;
     var Trump, Kim, Pou;
     var cursors, button;
-    var weapon, bullet;
+    var weapon, bullet, bulletTrump, bulletPou, bulletKim;
     var bulletPool;
     var scoreTrump = 0;
     var scoreKim = 0;
@@ -15,10 +15,12 @@ $(document).ready(function() {
     var video;
     var direction = 2;
     var shootWhileStanding;
-    var timer;
-    var total = 0;
     var dirKim, dirPou;
+    var final;
     var jumpButton;
+    var totalTime = 420;
+    var timeElapsed = 0;
+    var gameTimer;
 
 
     // konami code
@@ -50,6 +52,8 @@ $(document).ready(function() {
         game.load.audio('zik', '../audio/Street_Fighter_II_Music_-_Guile_-_HQ.ogg');
         game.load.video('champi', '../video/champignon.mp4');
         game.load.image('bouton', '../images/bouton_vote.png');
+        game.load.image('final', '../images/elysee4.jpg');
+
     }
 
     function create() {
@@ -59,7 +63,7 @@ $(document).ready(function() {
         // plateformes
         platform = game.add.group();
         platform.enableBody = true;
-        var ground = platform.create(-10, game.world.height - 45, 'platform');
+        ground = platform.create(-10, game.world.height - 45, 'platform');
         ground.body.immovable = true;
         ground = platform.create(70, game.world.height - 45, 'platform');
         ground.body.immovable = true;
@@ -79,30 +83,27 @@ $(document).ready(function() {
         ground.body.immovable = true;
         ground = platform.create(710, game.world.height - 45, 'platform');
         ground.body.immovable = true;
-        var ledge = platform.create(400, 350, 'platform');
+        ledge = platform.create(400, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(440, 350, 'platform');
+        ledge = platform.create(440, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(480, 350, 'platform');
+        ledge = platform.create(480, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(520, 350, 'platform');
+        ledge = platform.create(520, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(560, 350, 'platform');
+        ledge = platform.create(560, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(600, 350, 'platform');
+        ledge = platform.create(600, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        var ledge = platform.create(640, 350, 'platform');
+        ledge = platform.create(640, 350, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
-        // ledge = platform.create(40, 150, 'platform');
-        // ledge.scale.setTo(0.5, 0.5);
-        // ledge.body.immovable = true;
         ledge = platform.create(100, 150, 'platform');
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
@@ -122,6 +123,15 @@ $(document).ready(function() {
         ledge.scale.setTo(0.5, 0.5);
         ledge.body.immovable = true;
 
+        //Timer
+        startTime = new Date();
+
+        createTimer();
+        gameTimer = game.time.events.loop(100, function() {
+            updateTimer();
+        });
+
+
         //sprites perso
         Trump = game.add.sprite(350, game.world.height - 180, 'Trump');
         Kim = game.add.sprite(20, game.world.height - 180, 'Kim');
@@ -132,7 +142,6 @@ $(document).ready(function() {
 
         // bouton vote
         // button = game.add.button(game.world.centerX - 95, game.world.centerY - 95, 'bouton', actionOnClick, this, 2, 1, 0).scale.setTo(0.5, 0.5);
-
 
         // animations perso
         Trump.animations.add('left', [0, 1, 2, 3], 10, true);
@@ -180,14 +189,49 @@ $(document).ready(function() {
 
         bulletPool = this.game.add.group();
         for (var i = 0; i < 20; i++) {
-            bullet = this.game.add.sprite(0, 0, 'bullet');
-            bulletPool.add(bullet);
-            bullet.anchor.setTo(0.5, 0.5);
-            this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
-            bullet.kill();
-        }
-    }
+            bulletKim = this.game.add.sprite(0, 0, 'bullet');
+            bulletPou = this.game.add.sprite(0, 0, 'bullet');
+            bulletTrump = this.game.add.sprite(0, 0, 'bullet');
+            bulletPool.add(bulletKim);
+            bulletPool.add(bulletPou);
+            bulletPool.add(bulletTrump);
+            bulletKim.anchor.setTo(0.5, 0.5);
+            bulletPou.anchor.setTo(0.5, 0.5);
+            bulletTrump.anchor.setTo(0.5, 0.5);
+            this.game.physics.enable(bulletKim, Phaser.Physics.ARCADE);
+            this.game.physics.enable(bulletPou, Phaser.Physics.ARCADE);
+            this.game.physics.enable(bulletTrump, Phaser.Physics.ARCADE);
+            bulletKim.kill();
+            bulletPou.kill();
+            bulletTrump.kill();
+        };
 
+    };
+
+    //Timer
+    function createTimer() {
+        timeLabel = game.add.text(705, 45, "00:00", { fontSize: '36px', fill: '#fff' });
+        timeLabel.anchor.setTo(0.5, 0);
+        timeLabel.align = 'center';
+    };
+
+    function updateTimer() {
+        var currentTime = new Date();
+        var timeDifference = startTime.getTime() - currentTime.getTime();
+        timeElapsed = Math.abs(timeDifference / 1000);
+        var timeRemaining = totalTime - timeElapsed;
+        var minutes = Math.floor(timeRemaining / 60);
+        var seconds = Math.floor(timeRemaining) - (60 * minutes);
+        var result = (minutes < 10) ? "0" + minutes : minutes;
+        result += (seconds < 10) ? ":0" + seconds : ":" + seconds;
+        timeLabel.text = result;
+
+        if (timeElapsed >= totalTime) {
+            game.time.events.remove(gameTimer);
+            image = game.add.sprite(0, 0, 'final');
+            image.scale.setTo(0.5, 0.5);
+        }
+    };
 
     // déplacements aléatoires robots
     function startKim() {
@@ -205,23 +249,23 @@ $(document).ready(function() {
             Kim.animations.stop();
         } else if (botKim == 4 || botKim == 5) {
             if (dirKim == 1) {
-                bullet = bulletPool.getFirstDead();
-                if (bullet === null || bullet === undefined) return;
-                bullet.revive();
-                bullet.checkWorldBounds = true;
-                bullet.outOfBoundsKill = true;
-                bullet.reset(Kim.body.x + 90, Kim.body.y + 20);
-                bullet.body.velocity.x = 400;
-                bullet.body.velocity.y = 0;
+                bulletKim = bulletPool.getFirstDead();
+                if (bulletKim === null || bulletKim === undefined) return;
+                bulletKim.revive();
+                bulletKim.checkWorldBounds = true;
+                bulletKim.outOfBoundsKill = true;
+                bulletKim.reset(Kim.body.x + 90, Kim.body.y + 20);
+                bulletKim.body.velocity.x = 400;
+                bulletKim.body.velocity.y = 0;
             } else if (dirKim == 2) {
-                bullet = bulletPool.getFirstDead();
-                if (bullet === null || bullet === undefined) return;
-                bullet.revive();
-                bullet.checkWorldBounds = true;
-                bullet.outOfBoundsKill = true;
-                bullet.reset(Kim.body.x, Kim.body.y + 20);
-                bullet.body.velocity.x = -400;
-                bullet.body.velocity.y = 0;
+                bulletKim = bulletPool.getFirstDead();
+                if (bulletKim === null || bulletKim === undefined) return;
+                bulletKim.revive();
+                bulletKim.checkWorldBounds = true;
+                bulletKim.outOfBoundsKill = true;
+                bulletKim.reset(Kim.body.x, Kim.body.y + 20);
+                bulletKim.body.velocity.x = -400;
+                bulletKim.body.velocity.y = 0;
             }
         } else {
             Kim.body.velocity.x = 0;
@@ -232,11 +276,11 @@ $(document).ready(function() {
     function startPou() {
         var botPou = game.rnd.integerInRange(1, 5);
         if (botPou == 1) {
-            Pou.body.velocity.x = 300;
+            Pou.body.velocity.x = 400;
             Pou.animations.play('right', 10, true);
             dirPou = 1;
         } else if (botPou == 2) {
-            Pou.body.velocity.x = -300;
+            Pou.body.velocity.x = -400;
             Pou.animations.play('left', 10, true);
             dirPou = 2;
         } else if (botPou == 3 && (Pou.body.onFloor() || Pou.body.touching.down)) {
@@ -244,23 +288,23 @@ $(document).ready(function() {
             Pou.animations.stop();
         } else if (botPou == 4 || botPou == 5) {
             if (dirPou == 1) {
-                bullet = bulletPool.getFirstDead();
-                if (bullet === null || bullet === undefined) return;
-                bullet.revive();
-                bullet.checkWorldBounds = true;
-                bullet.outOfBoundsKill = true;
-                bullet.reset(Pou.body.x + 90, Pou.body.y + 20);
-                bullet.body.velocity.x = 400;
-                bullet.body.velocity.y = 0;
+                bulletPou = bulletPool.getFirstDead();
+                if (bulletPou === null || bulletPou === undefined) return;
+                bulletPou.revive();
+                bulletPou.checkWorldBounds = true;
+                bulletPou.outOfBoundsKill = true;
+                bulletPou.reset(Pou.body.x + 90, Pou.body.y + 20);
+                bulletPou.body.velocity.x = 400;
+                bulletPou.body.velocity.y = 0;
             } else if (dirPou == 2) {
-                bullet = bulletPool.getFirstDead();
-                if (bullet === null || bullet === undefined) return;
-                bullet.revive();
-                bullet.checkWorldBounds = true;
-                bullet.outOfBoundsKill = true;
-                bullet.reset(Pou.body.x, Pou.body.y + 20);
-                bullet.body.velocity.x = -400;
-                bullet.body.velocity.y = 0;
+                bulletPou = bulletPool.getFirstDead();
+                if (bulletPou === null || bulletPou === undefined) return;
+                bulletPou.revive();
+                bulletPou.checkWorldBounds = true;
+                bulletPou.outOfBoundsKill = true;
+                bulletPou.reset(Pou.body.x, Pou.body.y + 20);
+                bulletPou.body.velocity.x = -400;
+                bulletPou.body.velocity.y = 0;
             }
         } else {
             Pou.body.velocity.x = 0;
@@ -269,38 +313,64 @@ $(document).ready(function() {
     }
 
     // gestion scores perso
-    function collectWord(Trump, word) {
-        word.kill();
-        scoreTrump += 10;
+    function collectWordTrump() {
+        // bulletKim.kill();
+        // bulletPou.kill();
+        scoreTrump -= 10;
         scoreTextTrump.text = 'Trump: ' + scoreTrump;
-    }
-
-    function collectWord(Kim, word) {
-        word.kill();
+        scorePou += 10;
+        scoreTextPou.text = 'Poutine: ' + scorePou;
         scoreKim += 10;
         scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
     }
 
-    function collectWord(Pou, word) {
-        word.kill();
+    function collectWordKim() {
+        // bulletTrump.kill();
+        // bulletPou.kill();
+        scoreKim -= 10;
+        scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
         scorePou += 10;
         scoreTextPou.text = 'Poutine: ' + scorePou;
+        scoreTrump += 10;
+        scoreTextTrump.text = 'Trump: ' + scoreTrump;
+    }
+
+    function collectWordPou() {
+        // bulletTrump.kill();
+        // bulletKim.kill();
+        scorePou -= 10;
+        scoreTextPou.text = 'Poutine: ' + scorePou;
+        scoreTrump += 10;
+        scoreTextTrump.text = 'Trump: ' + scoreTrump;
+        scoreKim += 10;
+        scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
     }
 
     // gestion bouton
-    function actionOnClick() {
-        game.state.restart();
-    }
+    // function actionOnClick() {
+    //     game.state.restart();
+    // }
 
 
     function update() {
+
         // game.physics.arcade.collide(Kim, Pou);
         // game.physics.arcade.collide(Kim, Trump);
         // game.physics.arcade.collide(Pou, Trump);
+        // game.debug.body(Trump);
 
         game.physics.arcade.collide(Kim, platform);
         game.physics.arcade.collide(Pou, platform);
         game.physics.arcade.collide(Trump, platform);
+        // game.physics.arcade.collide(Trump, bullet);
+        // game.physics.arcade.collide(Kim, bullet);
+        // game.physics.arcade.collide(Pou, bullet);
+        game.physics.arcade.overlap(bulletTrump, Pou, collectWordPou, null, this);
+        game.physics.arcade.overlap(bulletKim, Pou, collectWordPou, null, this);
+        game.physics.arcade.overlap(bulletTrump, Kim, collectWordKim, null, this);
+        game.physics.arcade.overlap(bulletPou, Kim, collectWordKim, null, this);
+        game.physics.arcade.overlap(bulletKim, Trump, collectWordTrump, null, this);
+        game.physics.arcade.overlap(bulletPou, Trump, collectWordTrump, null, this);
 
         // déplacement player
         cursors = game.input.keyboard.createCursorKeys();
@@ -327,24 +397,24 @@ $(document).ready(function() {
     $(window).keypress(function(e) {
         if (e.keyCode = 32) {
             if (direction == 1) {
-                bullet = bulletPool.getFirstDead();
-                if (bullet === null || bullet === undefined) return;
-                bullet.revive();
-                bullet.checkWorldBounds = true;
-                bullet.outOfBoundsKill = true;
-                bullet.reset(Trump.body.x + 90, Trump.body.y + 20);
-                bullet.body.velocity.x = 300;
-                bullet.body.velocity.y = 0;
+                bulletTrump = bulletPool.getFirstDead();
+                if (bulletTrump === null || bulletTrump === undefined) return;
+                bulletTrump.revive();
+                bulletTrump.checkWorldBounds = true;
+                bulletTrump.outOfBoundsKill = true;
+                bulletTrump.reset(Trump.body.x + 90, Trump.body.y + 20);
+                bulletTrump.body.velocity.x = 300;
+                bulletTrump.body.velocity.y = 0;
                 direction = 1;
             } else if (direction == 2) {
-                bullet = bulletPool.getFirstDead();
-                if (bullet === null || bullet === undefined) return;
-                bullet.revive();
-                bullet.checkWorldBounds = true;
-                bullet.outOfBoundsKill = true;
-                bullet.reset(Trump.body.x, Trump.body.y + 20);
-                bullet.body.velocity.x = -300;
-                bullet.body.velocity.y = 0;
+                bulletTrump = bulletPool.getFirstDead();
+                if (bulletTrump === null || bulletTrump === undefined) return;
+                bulletTrump.revive();
+                bulletTrump.checkWorldBounds = true;
+                bulletTrump.outOfBoundsKill = true;
+                bulletTrump.reset(Trump.body.x, Trump.body.y + 20);
+                bulletTrump.body.velocity.x = -300;
+                bulletTrump.body.velocity.y = 0;
                 direction = 2;
             }
         };
