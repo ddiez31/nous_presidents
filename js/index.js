@@ -18,7 +18,7 @@ $(document).ready(function() {
     var dirKim, dirPou;
     var final;
     var jumpButton;
-    var totalTime = 10;
+    var totalTime = 420;
     var timeElapsed = 0;
     var gameTimer;
 
