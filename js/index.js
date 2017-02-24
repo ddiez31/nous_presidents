@@ -50,7 +50,7 @@ $(document).ready(function() {
         game.load.audio('zik', '../audio/Street_Fighter_II_Music_-_Guile_-_HQ.ogg');
         game.load.video('champi', '../video/champignon.mp4');
         game.load.image('bouton', '../images/bouton_vote.png');
-        game.load.image('final', '../images/elysee2.jpg');
+        game.load.image('final', '../images/elysee4.jpg');
 
     }
 
@@ -234,8 +234,10 @@ $(document).ready(function() {
 
         if (timeElapsed >= totalTime) {
             // timeLabel.text = "00:00";
-            image = game.add.image(0, 0, 'final');
-            image.scale.setTo(game.world.width, game.world.height);
+            game.time.events.remove(gameTimer);
+            image = game.add.sprite(0, 0, 'final');
+            image.scale.setTo(0.5, 0.5);
+            console.log(startTime);
         }
 
     };
