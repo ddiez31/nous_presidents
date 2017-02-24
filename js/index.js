@@ -48,13 +48,47 @@ $(document).ready(function() {
         game.load.spritesheet('Trump', '../images/SpriteTrump.png', 124, 140, 8);
         game.load.spritesheet('Kim', '../images/SpriteKim.png', 124, 140, 8);
         game.load.spritesheet('Pou', '../images/SpritePoutine.png', 124, 140, 8);
-        game.load.image('bullet', '../images/eco.png');
+        game.load.image('ecologie', '../images/ecologie.png');
+        game.load.image('emploi', '../images/emploi.png');
+        game.load.image('securite', '../images/sécurité.png');
+        game.load.image('eco', '../images/eco.png');
+        game.load.image('trump493', '../images/trump493.png');
+        game.load.image('trumpagri', '../images/trumpagri.png');
+        game.load.image('trumparmee', '../images/trumparmee.png');
+        game.load.image('trumpbudget', '../images/trumpbudget.png');
+        game.load.image('trumpclimat', '../images/trumpclimat.png');
+        game.load.image('trumpcollec', '../images/trumpcollec.png');
+        game.load.image('trumpcommint', '../images/trumpcommint.png');
+        game.load.image('trumpculture', '../images/trumpculture.png');
+        game.load.image('trumpdeficit', '../images/trumpdeficit.png');
+        game.load.image('trumpdette', '../images/trumpdette.png');
+        game.load.image('trumpeduc', '../images/trumpeduc.png');
+        game.load.image('trumpeffort', '../images/trumpeffort.png');
+        game.load.image('trumpeurope', '../images/trumpeurope.png');
+        game.load.image('trumpfonct', '../images/trumpfonct.png');
+        game.load.image('trumpintegration', '../images/trumpintegration.png');
+        game.load.image('trumpjustice', '../images/trumpjustice.png');
+        game.load.image('trumplois', '../images/trumplois.png');
+        game.load.image('trumpmedias', '../images/trumpmedias.png');
+        game.load.image('trumpobjectif', '../images/trumpobjectif.png');
+        game.load.image('', '../images/.png');
+        game.load.image('', '../images/.png');
+        game.load.image('', '../images/.png');
+        game.load.image('', '../images/.png');
+
         game.load.audio('zik', '../audio/Street_Fighter_II_Music_-_Guile_-_HQ.ogg');
         game.load.video('champi', '../video/champignon.mp4');
         game.load.image('bouton', '../images/bouton_vote.png');
         game.load.image('final', '../images/elysee4.jpg');
 
     }
+
+    var mots = ["ecologie", "emploi", "securite", "eco", "trump493", "trumpagri", "trumparmee", "trumpbudget", "trumpclimat", "trumpcollec", "trumpcommint", "trumpculture", "trumpdeficit", "trumpdette", "trumpeduc", "trumpeffort", "trumpeurope",  "trumpfonct", "trumpintegration", "trumpjustice",  "trumplois", "trumpmedias", "trumpobjectif", "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",];
+    console.log(mots);
+    function randArray (array) {
+        return array[Math.floor(Math.random()*array.length)];
+    }
+
 
     function create() {
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -183,15 +217,15 @@ $(document).ready(function() {
         music.play();
 
         // armes tir
-        weapon = game.add.weapon(60, 'bullet');
+        weapon = game.add.weapon(60, 'bouton');
         weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
         weapon.bulletSpeed = 400;
 
         bulletPool = this.game.add.group();
-        for (var i = 0; i < 20; i++) {
-            bulletKim = this.game.add.sprite(0, 0, 'bullet');
-            bulletPou = this.game.add.sprite(0, 0, 'bullet');
-            bulletTrump = this.game.add.sprite(0, 0, 'bullet');
+        for (var i = 0; i < 2; i++) {
+            bulletKim = this.game.add.sprite(0, 0, randArray(mots));
+            bulletPou = this.game.add.sprite(0, 0, randArray(mots));
+            bulletTrump = this.game.add.sprite(0, 0, randArray(mots));
             bulletPool.add(bulletKim);
             bulletPool.add(bulletPou);
             bulletPool.add(bulletTrump);
