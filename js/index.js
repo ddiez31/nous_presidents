@@ -71,10 +71,6 @@ $(document).ready(function() {
         game.load.image('trumplois', '../images/trumplois.png');
         game.load.image('trumpmedias', '../images/trumpmedias.png');
         game.load.image('trumpobjectif', '../images/trumpobjectif.png');
-        game.load.image('', '../images/.png');
-        game.load.image('', '../images/.png');
-        game.load.image('', '../images/.png');
-        game.load.image('', '../images/.png');
 
         game.load.audio('zik', '../audio/Street_Fighter_II_Music_-_Guile_-_HQ.ogg');
         game.load.video('champi', '../video/champignon.mp4');
@@ -83,10 +79,10 @@ $(document).ready(function() {
 
     }
 
-    var mots = ["ecologie", "emploi", "securite", "eco", "trump493", "trumpagri", "trumparmee", "trumpbudget", "trumpclimat", "trumpcollec", "trumpcommint", "trumpculture", "trumpdeficit", "trumpdette", "trumpeduc", "trumpeffort", "trumpeurope",  "trumpfonct", "trumpintegration", "trumpjustice",  "trumplois", "trumpmedias", "trumpobjectif", "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",];
-    console.log(mots);
-    function randArray (array) {
-        return array[Math.floor(Math.random()*array.length)];
+    var mots = ["ecologie", "emploi", "securite", "eco", "trump493", "trumpagri", "trumparmee", "trumpbudget", "trumpclimat", "trumpcollec", "trumpcommint", "trumpculture", "trumpdeficit", "trumpdette", "trumpeduc", "trumpeffort", "trumpeurope", "trumpfonct", "trumpintegration", "trumpjustice", "trumplois", "trumpmedias", "trumpobjectif", "", "", "", "", "", "", "", "", "", "", "", ];
+
+    function randArray(array) {
+        return array[Math.floor(Math.random() * array.length)];
     }
 
 
@@ -164,7 +160,6 @@ $(document).ready(function() {
         gameTimer = game.time.events.loop(100, function() {
             updateTimer();
         });
-
 
         //sprites perso
         Trump = game.add.sprite(350, game.world.height - 180, 'Trump');
@@ -352,63 +347,49 @@ $(document).ready(function() {
 
     // gestion scores perso
     function collectWordTrump() {
-        // bulletKim.kill();
-        // bulletPou.kill();
-        scoreTrump -= 10;
+        bulletKim.kill();
+        bulletPou.kill();
+        scoreTrump -= 1;
         scoreTextTrump.text = 'Trump: ' + scoreTrump;
-        scorePou += 10;
+        scorePou += 1;
         scoreTextPou.text = 'Poutine: ' + scorePou;
-        scoreKim += 10;
+        scoreKim += 1;
         scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
     }
 
     function collectWordKim() {
-        // bulletTrump.kill();
-        // bulletPou.kill();
-        scoreKim -= 10;
+        bulletTrump.kill();
+        bulletPou.kill();
+        scoreKim -= 1;
         scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
-        scorePou += 10;
+        scorePou += 1;
         scoreTextPou.text = 'Poutine: ' + scorePou;
-        scoreTrump += 10;
+        scoreTrump += 1;
         scoreTextTrump.text = 'Trump: ' + scoreTrump;
     }
 
     function collectWordPou() {
-        // bulletTrump.kill();
-        // bulletKim.kill();
-        scorePou -= 10;
+        bulletTrump.kill();
+        bulletKim.kill();
+        scorePou -= 1;
         scoreTextPou.text = 'Poutine: ' + scorePou;
-        scoreTrump += 10;
+        scoreTrump += 1;
         scoreTextTrump.text = 'Trump: ' + scoreTrump;
-        scoreKim += 10;
+        scoreKim += 1;
         scoreTextKim.text = 'Kim Jong-un: ' + scoreKim;
     }
 
-    // gestion bouton
-    // function actionOnClick() {
-    //     game.state.restart();
-    // }
-
-
     function update() {
-
-        // game.physics.arcade.collide(Kim, Pou);
-        // game.physics.arcade.collide(Kim, Trump);
-        // game.physics.arcade.collide(Pou, Trump);
-        // game.debug.body(Trump);
-
         game.physics.arcade.collide(Kim, platform);
         game.physics.arcade.collide(Pou, platform);
         game.physics.arcade.collide(Trump, platform);
-        // game.physics.arcade.collide(Trump, bullet);
-        // game.physics.arcade.collide(Kim, bullet);
-        // game.physics.arcade.collide(Pou, bullet);
-        game.physics.arcade.overlap(bulletTrump, Pou, collectWordPou, null, this);
-        game.physics.arcade.overlap(bulletKim, Pou, collectWordPou, null, this);
-        game.physics.arcade.overlap(bulletTrump, Kim, collectWordKim, null, this);
-        game.physics.arcade.overlap(bulletPou, Kim, collectWordKim, null, this);
-        game.physics.arcade.overlap(bulletKim, Trump, collectWordTrump, null, this);
-        game.physics.arcade.overlap(bulletPou, Trump, collectWordTrump, null, this);
+
+        game.physics.arcade.collide(bulletTrump, Pou, collectWordPou, null, this);
+        game.physics.arcade.collide(bulletKim, Pou, collectWordPou, null, this);
+        game.physics.arcade.collide(bulletTrump, Kim, collectWordKim, null, this);
+        game.physics.arcade.collide(bulletPou, Kim, collectWordKim, null, this);
+        game.physics.arcade.collide(bulletKim, Trump, collectWordTrump, null, this);
+        game.physics.arcade.collide(bulletPou, Trump, collectWordTrump, null, this);
 
         // déplacement player
         cursors = game.input.keyboard.createCursorKeys();
