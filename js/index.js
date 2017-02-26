@@ -18,7 +18,7 @@ $(document).ready(function() {
     var dirKim, dirPou;
     var final;
     var jumpButton;
-    var totalTime = 420;
+    var totalTime = 120;
     var timeElapsed = 0;
     var gameTimer;
 
@@ -75,7 +75,8 @@ $(document).ready(function() {
         game.load.audio('zik', '../audio/Street_Fighter_II_Music_-_Guile_-_HQ.ogg');
         game.load.video('champi', '../video/champignon.mp4');
         game.load.image('bouton', '../images/bouton_vote.png');
-        game.load.image('final', '../images/elysee4.jpg');
+        game.load.image('win', '../images/elyseehappy.png');
+        game.load.image('lost', '../images/elyseeunhappy.png');
 
     }
 
@@ -253,10 +254,17 @@ $(document).ready(function() {
         timeLabel.text = result;
 
         if (timeElapsed >= totalTime) {
-            game.time.events.remove(gameTimer);
-            image = game.add.button(0, 0, 'final', actionOnClick);
-            image.scale.setTo(0.5, 0.5);
-            game.add.text(10, 10, "Nouvelle partie? alors un petit clic!", { fontSize: '20px', fill: '#fff' });
+            if ((scoreTrump > scoreKim) && (scoreTrump > scoreKim)) {
+                game.time.events.remove(gameTimer);
+                image = game.add.button(0, 0, 'win', actionOnClick);
+                image.scale.setTo(0.5, 0.5);
+                game.add.text(10, 10, "Nouvelle partie? alors un petit clic!", { fontSize: '20px', fill: '#fff' });
+            } else {
+                game.time.events.remove(gameTimer);
+                image = game.add.button(0, 0, 'lost', actionOnClick);
+                image.scale.setTo(0.5, 0.5);
+                game.add.text(10, 10, "Nouvelle partie? alors un petit clic!", { fontSize: '20px', fill: '#fff' });
+            }
 
             function actionOnClick() {
                 game.state.restart();
