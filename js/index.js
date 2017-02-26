@@ -2,27 +2,21 @@ $(document).ready(function() {
     var winW = $(this).offsetWidth;
     var winH = $(this).offsetHeight;
     var game = new Phaser.Game(winW, winH, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-    var platform, word, bouton, background, ground, ledge;
+    var platform, bouton, background, ground, ledge;
     var Trump, Kim, Pou;
     var cursors, button;
-    var weapon, bullet, bulletTrump, bulletPou, bulletKim;
-    var bulletPool;
-    var scoreTrump = 1;
+    var weapon, bulletPool, bullet, bulletTrump, bulletPou, bulletKim;
+    var scoreTrump = 0;
     var scoreKim = 0;
     var scorePou = 0;
     var scoreTextTrump, scoreTextKim, scoreTextPou;
-    var music;
-    var video;
+    var music, video;
     var direction = 2;
-    var shootWhileStanding;
     var dirKim, dirPou;
-    var final;
     var jumpButton;
-    var totalTime = 120;
+    var totalTime = 420;
     var timeElapsed = 0;
     var gameTimer;
-
-
 
     // konami code
     if (window.addEventListener) {
@@ -80,7 +74,7 @@ $(document).ready(function() {
 
     }
 
-    var mots = ["ecologie", "emploi", "securite", "eco", "trump493", "trumpagri", "trumparmee", "trumpbudget", "trumpclimat", "trumpcollec", "trumpcommint", "trumpculture", "trumpdeficit", "trumpdette", "trumpeduc", "trumpeffort", "trumpeurope", "trumpfonct", "trumpintegration", "trumpjustice", "trumplois", "trumpmedias", "trumpobjectif", "", "", "", "", "", "", "", "", "", "", "", ];
+    var mots = ["ecologie", "emploi", "securite", "eco", "trump493", "trumpagri", "trumparmee", "trumpbudget", "trumpclimat", "trumpcollec", "trumpcommint", "trumpculture", "trumpdeficit", "trumpdette", "trumpeduc", "trumpeffort", "trumpeurope", "trumpfonct", "trumpintegration", "trumpjustice", "trumplois", "trumpmedias", "trumpobjectif"];
 
     function randArray(array) {
         return array[Math.floor(Math.random() * array.length)];
@@ -254,7 +248,7 @@ $(document).ready(function() {
         timeLabel.text = result;
 
         if (timeElapsed >= totalTime) {
-            if ((scoreTrump > scoreKim) && (scoreTrump > scoreKim)) {
+            if ((scoreTrump > scoreKim) && (scoreTrump > scorePou)) {
                 game.time.events.remove(gameTimer);
                 image = game.add.button(0, 0, 'win', actionOnClick);
                 image.scale.setTo(0.5, 0.5);
