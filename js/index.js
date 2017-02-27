@@ -38,7 +38,7 @@ $(document).ready(function() {
     }
 
     function preload() {
-        background = game.load.image('background', '../images/scene.jpg');
+        background = game.load.image('background', 'images/scene.jpg');
         game.load.image('platform', '../images/platform.png');
         game.load.spritesheet('Trump', '../images/SpriteTrump.png', 124, 140, 8);
         game.load.spritesheet('Kim', '../images/SpriteKim.png', 124, 140, 8);
